@@ -310,7 +310,8 @@ def main() -> int:
     p2 = draw_geometry(outdir)
     for p in (p1, p2):
         print(f"  {p.name:14s} {p.stat().st_size/1024:6.0f} KB  画布 "
-              f"{TEXT_W_IN*CM:.1f} x {H_IN*CM:.1f} cm（= 版心宽，缩放系数 1.0）")
+              f"{TEXT_W_IN*CM:.1f} x {H_IN*CM:.1f} cm（设计宽；RAA 版心 14.5 cm ⇒ 印 "
+              f"{TEXT_W_IN*CM*14.5/15.0:.1f} x {H_IN*CM*14.5/15.0:.1f} cm，缩放 0.967）")
     print(f"\nτ–DM 点云用真实数据：n = {len(meas)} 可测暴（占暴级 {j['population']['burst_level']} 的 "
           f"{len(meas)/j['population']['burst_level']*100:.1f}%），拟合 a/b/残差回指 pair565_scatter.json")
     return 0

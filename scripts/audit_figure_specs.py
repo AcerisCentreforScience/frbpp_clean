@@ -131,12 +131,33 @@ def vector_min_label_pt(pdf_path: Path) -> float | None:
                         continue
                     sizes.append(max(z for _, z in spans))
     return min(sizes) if sizes else None
+
+
+def vector_printed_pt(pdf_path: Path, width_cm: float | None) -> float | None:
+    """Smallest label size **as it prints**: the PDF is drawn at its own page width and LaTeX
+    scales it into the text block, so a 15.00 cm figure at 7.30 pt prints 7.06 pt in a 14.5 cm
+    column. The raster branch reports printed sizes too; one table, one convention.
+    """
+    design = vector_min_label_pt(pdf_path)
+    if design is None:
+        return design
+    try:
+        import pymupdf
+        with pymupdf.open(str(pdf_path)) as doc:
+            page_cm = doc[0].rect.width / 72.0 * CM_PER_IN
+    except Exception:
+        return design
+    if not width_cm or not page_cm:
+        return design
+    return design * width_cm / page_cm
+
+
 def main() -> int:
     hard, soft = [], []
     print(f"版心宽 {TEXT_W_CM} cm = {TEXT_W_CM/CM_PER_IN:.3f} in"
           f"   |   RAA 分档：彩色 {DPI_COLOUR:.0f} / 黑白 {DPI_GREY:.0f} / 线条 {DPI_LINE:.0f} dpi"
           f"   |   软线 {MIN_PT:.0f} pt（字号，内部要求）"
-          f"   |   位图字号取自生成器地板（{TEXT_W_CM:.1f}/{15.0:.1f} 缩放）")
+          f"   |   字号一律按**印到版心后**的值（矢量按 PDF 页宽、位图按生成器地板缩放）")
     print("=" * 108)
     print(f"{'行':>4}  {'文件':44s} {'类型':5s} {'像素/设计宽':>14s} "
           f"{'有效dpi':>9s} {'最小字号pt':>10s}  判定")
@@ -155,7 +176,7 @@ def main() -> int:
             continue
 
         if ext in VECTOR_EXT:
-            min_pt = vector_min_label_pt(p)
+            min_pt = vector_printed_pt(p, width_cm)
             if min_pt is not None and min_pt < MIN_PT:
                 soft.append((line_no, name, f"{min_pt:.1f} pt"))
                 print(f"{line_no:>4}  {name:44s} {'矢量':5s} {'-':>14s} {'∞':>9s} "

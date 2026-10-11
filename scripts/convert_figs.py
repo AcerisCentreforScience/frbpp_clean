@@ -10,6 +10,9 @@ from pathlib import Path
 
 from PIL import Image
 
+# RAA final layout textwidth is 145 mm (raa.cls); [referee] is 200 mm.
+TEXT_W_CM = 14.5
+
 SRC: list[tuple[str, str, str]] = [
     ("hires/fig2_event_dedup_mechanism.png", "hires/fig2_event_dedup_mechanism.png",
      "fig2_event_dedup_mechanism"),
@@ -57,7 +60,7 @@ def main() -> int:
 
         im2 = Image.open(tif_src)
         w, h = im2.size
-        eff = w / (16.2 / 2.54)
+        eff = w / (TEXT_W_CM / 2.54)
         im2.convert("RGB").save(OUT / f"{stem}.tif", "TIFF",
                                 compression="tiff_lzw", dpi=(900, 900))
         print(f"{stem:32s} {kind:26s} | TIFF {w}x{h} (全幅等效 {eff:.0f} dpi)")
