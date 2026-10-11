@@ -27,9 +27,20 @@ def fit(ax, x, y, s, size, max_w=0.30, xy=None, min_fs=MIN_FS_DEFAULT, **kw):
     return t
 
 
+def all_axes(axes):
+    """Every axes in a figure, including insets.
+
+    matplotlib puts axes created by Axes.inset_axes() in the parent's child_axes and
+    not in fig.axes, so walking fig.axes alone leaves inset titles and labels unchecked.
+    """
+    for ax in axes:
+        yield ax
+        yield from all_axes(ax.child_axes)
+
+
 def _items(fig, renderer):
     out = []
-    for ax in fig.axes:
+    for ax in all_axes(fig.axes):
         lg = ax.get_legend()
         tagged = ([("text", t) for t in ax.texts]
                   + ([("tick", t) for t in list(ax.get_xticklabels())
@@ -53,7 +64,7 @@ def report_text_over_data(fig, name):
     fig.canvas.draw()
     r = fig.canvas.get_renderer()
     hits = []
-    for ax in fig.axes:
+    for ax in all_axes(fig.axes):
         pts = []
         for ln in ax.get_lines():
             if not ln.get_linestyle().startswith("None") and ln.get_marker() == "None":

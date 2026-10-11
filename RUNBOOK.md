@@ -80,7 +80,8 @@ draws at a 15.0 cm design width with a **7.30 pt type floor**, which is 7.06 pt 
 scales it into its 14.5 cm text block. The floor is enforced, not requested: `fit()` clamps at
 the floor instead of shrinking further and the run exits non-zero if any string cannot hold it,
 while the shared gate in `fig_gate.py` exits non-zero if any block overprints a neighbouring
-label, crosses the canvas or sits on top of data points - and writes nothing in that case.
+label - text inside inset axes included - crosses the canvas or sits on top of data points,
+and writes nothing in that case.
 Rendering is deterministic: two independent runs produce byte-identical PNGs. Fonts are the
 bundled DejaVu Sans; nothing here needs a system font.
 

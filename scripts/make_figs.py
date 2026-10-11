@@ -385,7 +385,7 @@ def fig3():
         fit(ax, 5, y - 9.5, b, FS(5.4), max_w=0.94, va="top", color="0.25",
             linespacing=1.4)
         if k < 3:
-            ax.add_patch(FancyArrowPatch((50, y - 21.4), (50, y - 23.6),
+            ax.add_patch(FancyArrowPatch((88, y - 21.4), (88, y - 23.6),
                                          arrowstyle="-|>", mutation_scale=6,
                                          color="0.45", lw=0.8))
         y -= 23.0
@@ -465,8 +465,8 @@ def fig4():
     ax.axvspan(0, 0.1, color=C_BLUE, alpha=0.10, lw=0)
     ax.axvline(np.median(ah), color="k", lw=0.8, ls="--")
     ax.set_xlabel("|hour angle| (h)"); ax.set_ylabel("Cat2 events")
-    ax.text(0.97, 0.97, "median 0.049 h\n78.9% at |HA|<0.1 h\nCHIME transit window",
-            transform=ax.transAxes, fontsize=FS(5.8), ha="right", va="top", color="0.15")
+    fit(ax, 0.97, 0.28, "median 0.049 h\n78.9% < 0.1 h\nCHIME window",
+        FS(5.8), max_w=0.92, transform=ax.transAxes, ha="right", va="top", color="0.15")
     axi = ax.inset_axes([0.50, 0.38, 0.40, 0.42])
     theta = np.linspace(-1.2, 1.2, 100)
     axi.plot(theta, np.cos(theta * np.pi / 2.4), color=C_BLUE, lw=1.0)
