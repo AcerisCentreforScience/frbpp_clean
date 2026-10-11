@@ -1,5 +1,5 @@
 {
- "built_at": "2026-10-11T13:25:34.103901+08:00",
+ "built_at": "2026-10-11T21:00:43.560897+08:00",
  "criteria": "同名 且 |Δt|<0.05 d = 同一暴（与 crossmatch.SAME_EVENT_DT_DAYS 一致）；保留 Cat2 为权威行",
  "note": "build_event_table 只在目录行级 concat，去重铁律在配对层生效。故 row-level 计数含 Cat1/Cat2 重复收录行；dedup 计数为独立物理事件数。",
  "row_level": {

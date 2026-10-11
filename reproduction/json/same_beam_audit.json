@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-10-11T13:51:31+08:00",
+  "built_at": "2026-10-11T21:26:09+08:00",
   "purpose": "审稿 A3：23.9″ 是否为同束/相关系统误差的自然产物",
   "data_gaps": [
     "Cat2 无 beam/beamformer/zenith-angle 列，束身份用 |ΔHA|<0.1 h 近似",

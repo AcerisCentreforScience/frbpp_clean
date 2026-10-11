@@ -17,6 +17,8 @@ dm_sigma_floor.py	pipeline	ranking under the empirical DM floor
 dm_floor_robust.py	pipeline	floor bins, bootstrap intervals, window sensitivity
 c2_null_battery.py	pipeline	permutation nulls and multiplicity
 same_beam_test.py	pipeline	same-beam and correlated-error audit
+same_beam_coupled_null.py	pipeline	pair-level chance rate under a coupling-preserving DM permutation
+dm_fingerprint_check.py	pipeline	offline recomputation of the dispersion-measure fingerprint distances
 build_isolation_data.py	pipeline	nearest-neighbour background for the figure
 known_repeater_control.py	pipeline	known-repeater control statistics
 isolation_conv_565d.py	pipeline	joint isolation of the primary pair

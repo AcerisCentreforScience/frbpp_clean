@@ -29,7 +29,7 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-verified.txt
 .venv/bin/python -m pip install -e .
 .venv/bin/python -m pytest -q          # 50 passed, 1 skipped
-bash scripts/run_all.sh                # 18 steps, ~26 min, per-step logs under OUT/chain/
+bash scripts/run_all.sh                # 20 steps, ~27 min, per-step logs under OUT/chain/
 ```
 
 `requirements-verified.txt` pins the exact build the results were produced with (Python 3.13,
@@ -66,11 +66,11 @@ chain never has to reach the network.
 
 ## Verification
 
-Rebuilt on a clean machine from a fresh environment: the 18 steps complete with exit code 0, the
+Rebuilt on a clean machine from a fresh environment: the 20 steps complete with exit code 0, the
 regenerated `reproduction/` matches the shipped tables byte for byte and the shipped JSON
 artefacts in every value except four `built_at` timestamps, the six raster figures regenerate
 pixel-identical to those in the compiled paper, and `scripts/audit_manuscript_numbers.py`
-confirms 67 of 67 published quantities against the recomputed artefacts. Details in
+confirms 74 of 74 published quantities against the recomputed artefacts. Details in
 [RUNBOOK.md](RUNBOOK.md#verification) and [TUTORIAL.md § 12](TUTORIAL.md#12).
 
 ## Licence and citation

@@ -34,12 +34,14 @@ run 08_dm_sigma_floor      "$PY" scripts/dm_sigma_floor.py
 run 09_dm_floor_robust     "$PY" scripts/dm_floor_robust.py
 run 10_null_battery        "$PY" scripts/c2_null_battery.py
 run 11_same_beam           "$PY" scripts/same_beam_test.py --draws 400 --seed 20261011
-run 12_isolation_bg        "$PY" scripts/build_isolation_data.py
-run 13_known_repeater      "$PY" scripts/known_repeater_control.py
-run 14_isolation_conv      "$PY" scripts/isolation_conv_565d.py
-run 15_scatter             "$PY" scripts/scatter_565d.py
-run 16_period              "$PY" scripts/period_565d.py
-run 17_dm_z_inversion      "$PY" scripts/dm_z_inversion.py
-run 18_repro_package       "$PY" scripts/repro_package.py
+run 12_coupled_null        "$PY" scripts/same_beam_coupled_null.py --draws 20000 --seed 20261011
+run 13_dm_fingerprint      "$PY" scripts/dm_fingerprint_check.py
+run 14_isolation_bg        "$PY" scripts/build_isolation_data.py
+run 15_known_repeater      "$PY" scripts/known_repeater_control.py
+run 16_isolation_conv      "$PY" scripts/isolation_conv_565d.py
+run 17_scatter             "$PY" scripts/scatter_565d.py
+run 18_period              "$PY" scripts/period_565d.py
+run 19_dm_z_inversion      "$PY" scripts/dm_z_inversion.py
+run 20_repro_package       "$PY" scripts/repro_package.py
 echo "CHAIN_RC=$rc"
 exit $rc

@@ -27,6 +27,8 @@ artefact is produced by a script in `scripts/` with a fixed seed.
 | `tables/dm_floor_bins.csv` | `scripts/dm_floor_robust.py` |
 | `json/dm_floor_robust.json` | `scripts/dm_floor_robust.py` (bootstrap CIs, three windows, rank stability) |
 | `json/same_beam_audit.json` | `scripts/same_beam_test.py` (conditional pools, rho sweep, hour angles) |
+| `json/coupled_null.json` | `scripts/same_beam_coupled_null.py` (chance rate under a coupling-preserving DM permutation) |
+| `json/dm_fingerprint.json` | `scripts/dm_fingerprint_check.py` (offline recomputation of the dispersion-measure fingerprint distances) |
 | `json/isolation_background.json` | `scripts/build_isolation_data.py` (nearest-neighbour ECDF, cross-day curve) |
 | `json/null_battery_summary.json` | `scripts/c2_null_battery.py` |
 | `json/event_table_audit.json`, `json/known_repeater_control.json` | `scripts/event_table_dedup_audit.py`, `scripts/known_repeater_control.py` |

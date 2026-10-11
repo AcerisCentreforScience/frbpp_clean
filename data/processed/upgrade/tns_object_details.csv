@@ -1,0 +1,30 @@
+group,query,code,found,objid,objtype,ra,dec,ra_err,dec_err,dm,dm_err,disc_date,discoverer,data_src,repeater_of,internal,reporter,sep_pair_arcsec
+pair,FRB20200511C,200,True,104449,"{'name': 'FRB', 'id': 130}",20.19,51.15,0.54,0.86,1834.24,3.23,2020-05-11,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_83893193,CHIME_FRB_bot,11.637300484638024
+pair,FRB20211128E,200,True,102639,"{'name': 'FRB', 'id': 130}",20.18,51.14,0.52,0.77,1833.03,0.4,2021-11-28,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_199832669,CHIME_FRB_bot,33.63314059313371
+storm_F45,FRB20230814G,200,True,178952,"{'name': 'FRB', 'id': 130}",347.28,48.8,0.57,0.78,227.26,0.81,2023-08-14,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_311732940,CHIME_FRB_bot,76007.3790210356
+storm_F45,FRB20230825D,200,True,178955,"{'name': 'FRB', 'id': 130}",347.39,48.79,0.52,0.89,222.0,0.4,2023-08-25,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_312569836,CHIME_FRB_bot,75772.24884474988
+storm_F45,FRB20230825E,200,True,178956,"{'name': 'FRB', 'id': 130}",347.3,48.8,0.37,0.58,222.41,0.81,2023-08-25,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_312570403,CHIME_FRB_bot,75962.51088778964
+storm_F45,FRB20230825F,200,True,178957,"{'name': 'FRB', 'id': 130}",347.29,48.79,0.36,0.56,220.79,0.81,2023-08-25,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_312570431,CHIME_FRB_bot,75996.6146655053
+storm_F45,FRB20230825G,200,True,178958,"{'name': 'FRB', 'id': 130}",347.46,48.8,0.45,0.66,222.41,0.81,2023-08-25,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_312570561,CHIME_FRB_bot,75603.52743965604
+storm_F45,FRB20230825H,200,True,178959,"{'name': 'FRB', 'id': 130}",347.34,48.79,0.47,0.69,224.83,1.62,2023-08-25,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_312571008,CHIME_FRB_bot,75884.43507952333
+storm_F45,FRB20230825I,200,True,178960,"{'name': 'FRB', 'id': 130}",347.41,48.79,0.49,0.71,225.64,0.81,2023-08-25,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_312571048,CHIME_FRB_bot,75727.3724945823
+surviving,FRB20211127E,200,True,103705,"{'name': 'FRB', 'id': 130}",256.38,69.54,0.61,1.49,840.29,0.81,2021-11-27,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_199634823,CHIME_FRB_bot,189288.65713584062
+surviving,FRB20220623D,200,True,171198,"{'name': 'FRB', 'id': 130}",255.97,69.53,0.52,1.32,842.72,1.62,2022-06-23,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_231974710,CHIME_FRB_bot,189653.5360209999
+surviving,FRB20200919A,200,True,104165,"{'name': 'FRB', 'id': 130}",206.29,15.73,0.66,0.52,380.11,1.62,2020-09-19,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_135625992,CHIME_FRB_bot,406469.17645574285
+surviving,FRB20210111A,200,True,103250,"{'name': 'FRB', 'id': 130}",206.3,15.74,0.64,0.51,380.92,0.81,2021-01-11,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_151705004,CHIME_FRB_bot,406430.75965788227
+surviving,FRB20200814C,200,True,104234,"{'name': 'FRB', 'id': 130}",117.36,54.03,0.53,0.88,800.66,1.62,2020-08-14,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_116759450,CHIME_FRB_bot,195296.03212048518
+surviving,FRB20210829A,200,True,102777,"{'name': 'FRB', 'id': 130}",117.53,54.03,0.42,0.75,801.07,0.4,2021-08-29,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_183093346,CHIME_FRB_bot,195571.52243167334
+surviving,FRB20211116C,200,True,102664,"{'name': 'FRB', 'id': 130}",330.27,22.25,0.45,0.44,885.58,0.81,2021-11-16,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_197791870,CHIME_FRB_bot,172908.99295890704
+surviving,FRB20211129A,200,True,102634,"{'name': 'FRB', 'id': 130}",330.05,22.25,0.55,0.53,884.77,1.62,2021-11-29,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_200153880,CHIME_FRB_bot,173382.45262799892
+surviving,FRB20220607C,200,True,154892,"{'name': 'FRB', 'id': 130}",110.93,74.59,0.55,1.75,702.8,0.81,2022-06-07,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_229029926,CHIME_FRB_bot,149506.75103868937
+surviving,FRB20220621D,200,True,178947,"{'name': 'FRB', 'id': 130}",111.05,74.59,0.5,1.64,700.38,1.62,2022-06-21,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_231744341,CHIME_FRB_bot,149615.31871616948
+surviving,FRB20200220I,200,True,103383,"{'name': 'FRB', 'id': 130}",71.92,27.85,0.48,0.49,1006.08,3.23,2020-02-20,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_73743926,CHIME_FRB_bot,161942.40209680836
+surviving,FRB20230721C,200,True,154351,"{'name': 'FRB', 'id': 130}",71.73,27.85,0.56,0.54,1001.64,0.4,2023-07-21,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_304419613,CHIME_FRB_bot,161521.15717395704
+dm_fingerprint,FRB20181017D,200,True,76914,"{'name': 'FRB', 'id': 130}",9.124167,11.333278,0.0,0.0,1845.2,1.0,2018-10-17,chenhui niu,"{'groupid': 0,",,FRB181017,Dr. Chen-Hui Niu,146977.93739993888
+dm_fingerprint,FRB20200514D,200,True,104438,"{'name': 'FRB', 'id': 130}",295.48,63.37,0.41,0.9,1818.07,6.47,2020-05-14,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_84140210,CHIME_FRB_bot,157575.55222493707
+dm_fingerprint,FRB20200620B,200,True,104376,"{'name': 'FRB', 'id': 130}",298.34,39.92,0.53,0.69,1847.18,3.23,2020-06-20,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_94524082,CHIME_FRB_bot,199401.38068193215
+dm_fingerprint,FRB20200924A,200,True,104153,"{'name': 'FRB', 'id': 130}",223.31,26.73,0.57,0.55,1824.54,12.94,2020-09-24,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_136318278,CHIME_FRB_bot,358182.7533029555
+dm_fingerprint,FRB20220616A,200,True,154910,"{'name': 'FRB', 'id': 130}",234.95,67.93,0.53,1.25,1848.8,1.62,2022-06-16,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_230609217,CHIME_FRB_bot,209246.12279132273
+dm_fingerprint,FRB20230724A,200,True,154354,"{'name': 'FRB', 'id': 130}",149.97,25.9,0.38,0.4,1847.99,0.81,2023-07-24,CHIME/FRB Collaboration,{'groupid': 86,,chimefrb_304811604,CHIME_FRB_bot,328315.9851731421
+reference,FRB20220912A,200,True,118087,"{'name': 'FRB', 'id': 130}",347.2929,48.699,0.0386,0.0281,219.457,0.042,2022-09-12,Emily Petroff,{'groupid': 86,,244950465,Dr. Emily Petroff,76096.9669088548
+reference,FRB20180916B,200,True,55523,"{'name': 'FRB', 'id': 130}",29.17,65.74,0.28333333333333,0.31666666666667,347.76,1.62,2018-09-16,"A. V. Zwaniga, V. M. Kas",{'groupid': 86,,15372046,CHIME_FRB_bot,55058.36811634545

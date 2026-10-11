@@ -26,28 +26,38 @@ minutes, and the whole chain runs in ~28 minutes.
 
 ## Steps
 
-| # | Script | Reads | Writes | Time |
-| --- | --- | --- | --- | --- |
-| 01 | `build_interim.py` | `data/raw/chime/{cat2_25,05_cat1,03_180916,06_injections}` | `data/interim/*.parquet`, `_build_manifest.json` | 3 s |
-| 02 | `event_table_dedup_audit.py` | interim | `upgrade/event_table_audit.json` (5608 -> 5014 -> 3742 -> 3665) | 1 s |
-| 03 | `rerun_v13_event_dedup.py` | interim | `upgrade/g4b_rerun_20261009_v13.json` | 2 s |
-| 04 | `gate_g4b.py` | interim | `upgrade/g4b_report.json` | 5 s |
-| 05 | `formalize_c2.py` | interim, `g4b_report.json` | `upgrade/c2_candidates_v1.{parquet,csv}`, `c2_formalization.md` | 4 s |
-| 06 | `c2_external_v2.py` | `c2_candidates_v1.parquet`, `data/raw/blinkverse` | `upgrade/c2_candidates_v2.{parquet,csv}`, `c2_external_v2.md` | 1 s |
-| 07 | `rank_c2_candidates.py` | raw Cat2, candidates v1/v2 | `upgrade/c2_ranked_{crossday,sameday,hypotheses}_v1.*` | 3 s |
-| 08 | `dm_sigma_floor.py` | raw Cat2, ranked v1 | `upgrade/c2_ranked_*_v14.*`, `c2_ranked_dm_sigma_v1.*` | 1 s |
-| 09 | `dm_floor_robust.py` | raw Cat2, ranked v14 | `upgrade/c2_dm_floor_bins_v1.csv`, `c2_dm_floor_robust_v1.json` | 1 s |
-| 10 | `c2_null_battery.py` | interim, raw Cat2, candidates v1 | `upgrade/c2_null_battery.json` | 921 s |
-| 11 | `same_beam_test.py --draws 400 --seed 20261011` | interim | `upgrade/same_beam_test.json` | 655 s |
-| 12 | `build_isolation_data.py` | interim, candidates | `upgrade/c2_isolation_figure_v1.json` | 4 s |
-| 13 | `known_repeater_control.py` | raw Cat2, interim | `upgrade/known_repeater_control{.json,_rows.csv}` | 2 s |
-| 14 | `isolation_conv_565d.py` | interim | `upgrade/pair565_isolation.json` | 3 s |
-| 15 | `scatter_565d.py` | interim | `upgrade/pair565_scatter.json` | 1 s |
-| 16 | `period_565d.py` | interim | `upgrade/pair565_period.json` | 2 s |
-| 17 | `dm_z_inversion.py` | constants only | `upgrade/dm_z_inversion.json` | 1 s |
-| 18 | `repro_package.py` | everything above | `reproduction/{README.md,tables/,json/,logs/,MANIFEST.csv}` | hard asserts |
+20 steps.
 
-Step 18 is the guard: it aborts unless the candidate table is exactly the 28 frozen pairs, the
+Each step reads the artefacts of the steps before it and writes its own. Exit codes and
+seconds are taken from one clean-room invocation of `scripts/run_all.sh` after every derived file
+was deleted, so this table cannot drift from the runner: it is regenerated from
+`run_all.sh` and `OUT/chain` logs. Full descriptions of each step are in
+[TUTORIAL.md § 4](TUTORIAL.md#4).
+
+| # | Script (as invoked by `run_all.sh`) | Exit | Measured |
+| --- | --- | --- | --- |
+| 01 | `build_interim.py` | exit 0 | 3 s |
+| 02 | `event_table_dedup_audit.py` | exit 0 | 0 s |
+| 03 | `rerun_v13_event_dedup.py` | exit 0 | 2 s |
+| 04 | `gate_g4b.py` | exit 0 | 4 s |
+| 05 | `formalize_c2.py` | exit 0 | 3 s |
+| 06 | `c2_external_v2.py` | exit 0 | 0 s |
+| 07 | `rank_c2_candidates.py` | exit 0 | 3 s |
+| 08 | `dm_sigma_floor.py` | exit 0 | 1 s |
+| 09 | `dm_floor_robust.py` | exit 0 | 1 s |
+| 10 | `c2_null_battery.py` | exit 0 | 872 s |
+| 11 | `same_beam_test.py --draws 400 --seed 20261011` | exit 0 | 639 s |
+| 12 | `same_beam_coupled_null.py --draws 20000 --seed 20261011` | exit 0 | 8 s |
+| 13 | `dm_fingerprint_check.py` | exit 0 | 1 s |
+| 14 | `build_isolation_data.py` | exit 0 | 4 s |
+| 15 | `known_repeater_control.py` | exit 0 | 2 s |
+| 16 | `isolation_conv_565d.py` | exit 0 | 3 s |
+| 17 | `scatter_565d.py` | exit 0 | 0 s |
+| 18 | `period_565d.py` | exit 0 | 1 s |
+| 19 | `dm_z_inversion.py` | exit 0 | 1 s |
+| 20 | `repro_package.py` | exit 0 | 1 s |
+
+Step 20 is the guard: it aborts unless the candidate table is exactly the 28 frozen pairs, the
 component decomposition is exactly 8, the audited-away group is exactly the 21 pairs of the
 seven-event component, and the primary pair's floor consistency matches step 08.
 
@@ -157,8 +167,9 @@ Run in a copy of this tree at a different path with a fresh virtual environment 
 | Check | Result |
 | --- | --- |
 | `pytest -q` | 50 passed, 1 skipped (the skipped test needs the 190 MB HEALPix exposure map) |
-| full chain, 18 steps | 18/18 exit 0 (`CHAIN_RC=0`) in one invocation; `repro_package.py` asserts 28 pairs / 8 components / 7 kept / 21 removed and the floor ratio 0.119 |
+| full chain, 20 steps | 20/20 exit 0 (`CHAIN_RC=0`) in one invocation; `repro_package.py` asserts 28 pairs / 8 components / 7 kept / 21 removed and the floor ratio 0.119 |
+| pair-level chance rate under a coupling-preserving null | cross-day joint box lambda = 0.0011 +/- 0.0331, P(>=1) = 0.0011 over 20000 DM permutations; randomising right ascension instead gives lambda = 0, so the coupling-preserving null is the conservative one |
 | rebuilt `reproduction/` vs the shipped one | tables byte-identical (`events_frozen.csv` 5014 rows, `candidates_28pairs.csv` 28, `dm_floor_bins.csv` 12) and both TNS log files byte-identical; 794 JSON leaves compared, the only differences are 4 `built_at` timestamps |
-| `audit_manuscript_numbers.py` | 67 of 67 quantities agree with the recomputed artefacts, including the anchor deviations and the catalogue row/burst split |
+| `audit_manuscript_numbers.py` | 74 of 74 quantities agree with the recomputed artefacts, including the anchor deviations and the catalogue row/burst split |
 | figures regenerated from the recomputed artefacts | the 6 raster panels are pixel-identical to the images embedded in the compiled PDF (maxdiff 0), and the 5 vector panels draw exactly the same label text |
-| timings | null battery 906 s, same-beam audit 633 s, everything else seconds; whole chain ~26 min |
+| timings | null battery 872 s, same-beam audit 639 s, coupling-preserving null 8 s, fingerprint recheck 1 s, everything else seconds; whole chain ~27 min |

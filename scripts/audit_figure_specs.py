@@ -12,7 +12,9 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 TEX = ROOT / "docs" / "submission" / "raa_manuscript.tex"
-TEXT_W_CM = 16.2
+# raa.cls sets textwidth to 145mm for the final layout (200mm under [referee]); the
+# generators design at 15.00 cm, so print scales figures by 14.5/15.0.
+TEXT_W_CM = 14.5
 CM_PER_IN = 2.54
 
 DPI_COLOUR = 300.0

@@ -18,3 +18,4 @@ OUT/
 
 # local credentials
 config/*.local.json
+!data/processed/upgrade/tns_object_details.csv

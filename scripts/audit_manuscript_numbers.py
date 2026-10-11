@@ -95,6 +95,8 @@ def main() -> int:
     full_nb = load(up / "c2_null_battery.json")
     rob = load(repro / "json" / "dm_floor_robust.json")
     sb = load(repro / "json" / "same_beam_audit.json")
+    cn = load(up / "same_beam_coupled_null.json")
+    fp = load(up / "dm_fingerprint.json")
     ctl = load(repro / "json" / "known_repeater_control.json")
     sc = load(up / "pair565_scatter.json")
     per = load(up / "pair565_period.json")
@@ -194,6 +196,17 @@ def main() -> int:
         ("formal DM error shift on z (table states an upper bound)",
          (zinv["bands"]["formal_dm_error_pm"]["z"][1] - zinv["bands"]["formal_dm_error_pm"]["z"][0])
          / 2.0, ["0.001"], "formal", None),
+        ("cross-day joint-box chance rate, coupling preserved",
+         cn["pools"]["cross-day (|dt| > 1 d) with theta < 24"]["lambda_mean"], None,
+         "permutations (seed 20261011)", None),
+        ("observed cross-day pairs inside the box",
+         cn["pools"]["cross-day (|dt| > 1 d) with theta < 24"]["observed_in_box"], None,
+         "permutations (seed 20261011)", None),
+        ("the exchangeability caveat itself is stated", None, ["exchangeable"], None, None),
+        ("sources in the dispersion-measure range", fp["n_returned"], None, "fingerprint", None),
+        ("other sources at comparable dispersion measure", fp["n_others"], None, "fingerprint", None),
+        ("closest comparable-DM source (deg)", fp["min_separation_deg"], None, "fingerprint", None),
+        ("comparable-DM sources within one degree", None, ["none"], "fingerprint", None),
         ("distinct bursts in Catalogue 2", sc["population"]["burst_level"], None, None, None),
         ("sub-burst rows in Catalogue 2 (5045 rows minus bursts)",
          5045 - sc["population"]["burst_level"], ["506"], None, None),

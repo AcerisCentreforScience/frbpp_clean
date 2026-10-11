@@ -18,7 +18,7 @@ itself is not part of this repository; the auditors in section 8 run against a l
 1. [Quick start / 三分钟跑起来](#1)
 2. [Layout / 目录结构](#2)
 3. [Inputs / 输入数据](#3)
-4. [The 18 steps, one by one / 十八步逐步详解](#4)
+4. [The 20 steps, one by one / 二十步逐步详解](#4)
 5. [Frozen conventions / 冻结口径](#5)
 6. [Re-deriving one number / 想核对某一个数](#6)
 7. [Regenerating the figures / 重出图](#7)
@@ -53,12 +53,12 @@ GCN），以及混入了"仅 Cat1 源"的那个分母（58/85）。核心量包�
 B = 1000 的四类置换零假设（p ≤ 0.001，Bonferroni×9 全局 p ≤ 0.009）；同束与相关误差审计；散射判别量；
 DM 预算及其红移；565 d ↔ 567.002 恒星日的量化；以及全部 11 张图。
 
-**Verified / 实测状态.** 18/18 steps exit 0 in one invocation on a different drive with a fresh
+**Verified / 实测状态.** 20/20 steps exit 0 in one invocation on a different drive with a fresh
 virtual environment; the rebuilt `reproduction/` matches the shipped one byte-for-byte except four
 `built_at` fields; the six raster figures regenerate pixel-identical to the compiled PDF (maxdiff 0);
-`audit_manuscript_numbers.py` reports **67/67** agreeing quantities.
-在换盘 + 全新虚拟环境下 18/18 步 exit 0；重建的 `reproduction/` 与随包件**只差 4 个 `built_at`**；
-6 张位图重出后与论文 PDF 内嵌图逐像素相同；`audit_manuscript_numbers.py` **67/67 一致**。
+`audit_manuscript_numbers.py` reports **74/74** agreeing quantities.
+在换盘 + 全新虚拟环境下 20/20 步 exit 0；重建的 `reproduction/` 与随包件**只差 4 个 `built_at`**；
+6 张位图重出后与论文 PDF 内嵌图逐像素相同；`audit_manuscript_numbers.py` **74/74 一致**。
 
 ---
 
@@ -84,7 +84,7 @@ python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements-verified.txt   # exact versions, bit-reproducible
 .venv/bin/python -m pip install -e .
 .venv/bin/python -m pytest -q                                   # 50 passed, 1 skipped
-bash scripts/run_all.sh                                         # 18 steps, logs in OUT/chain/
+bash scripts/run_all.sh                                         # 20 steps, logs in OUT/chain/
 ```
 
 ### 1.3 Windows (PowerShell)
@@ -114,7 +114,7 @@ $env:PYTHONIOENCODING="utf-8"   # 必须：有些步骤会打印 m² 等字符 /
 --- [18_repro_package] exit=0  1s
 CHAIN_RC=0
 ```
-Step 18 prints the guard summary / 第 18 步会打印守卫结果：
+Step 20 prints the guard summary / 第 20 步会打印守卫结果：
 ```
 candidates_28pairs  28 pairs / 8 components / kept 7 / removed 21
 primary pair DeltaDM/sigma_floor = 0.1191 (matches the artefact)
@@ -202,7 +202,7 @@ catalogue releases; nothing here depends on private or embargoed data.
 
 <a id="4"></a>
 
-## 4. 十八步链路逐步详解 / The 18 steps, one by one
+## 4. 二十步链路逐步详解 / The 20 steps, one by one
 
 Each step is an ordinary script: it reads the artefacts of earlier steps and writes its own.
 `OUT/chain/<NN_name>.log` keeps its console output; `run_all.sh` records exit codes.
@@ -251,7 +251,7 @@ Skipping this step makes step 5 crash; the union over the nine configurations is
 | --- | --- |
 | 写 writes | `c2_candidates_v1.{parquet,csv}`（判据池 **28 对**）、`c2_candidates_edge_v1.csv`（**2 对**边缘）、`c2_formalization.md` |
 | 判据 criterion | 保留 DM 窗 ≤ 5 的九档配置；只由 DM±20 支持的对进边缘文件 / keep configurations up to DM ±5 |
-| 为什么 why | 论文主张 28 对，30 对并集只作"更严 null bar"；不加这道过滤，第 18 步断言会中止 |
+| 为什么 why | 论文主张 28 对，30 对并集只作"更严 null bar"；不加这道过滤，第 20 步断言会中止 |
 
 被过滤掉的两对是 / the two archived edge pairs are
 `FRB20221208D × FRB20230913A` (ΔDM = +9.25) 和 and `FRB20190519J × FRB20200809C` (ΔDM = −6.59).
@@ -310,21 +310,41 @@ Writes `same_beam_test.json`. 三条结论 / three outputs:
    **跨日子集 `P(≥1) = 0`** ⇒ 小 θ 背景基本是同夜碎片。
    Same-beam is not an independent condition; the load-bearing restriction is cross-day.
 
-### 步骤 12–16 — 背景、对照与三个专用量 / background, control, three specialised quantities
+### 步骤 12 — `same_beam_coupled_null.py`（20000 次置换）保耦合零假设 / coupling-preserving null
+
+只置换声明域的 DM，**坐标、历元、时角一律不动**，因而 RA=到达时间 的耦合按构造保留；池子、阈值与
+时角函数直接 import 自步骤 11，两套口径不会漂。另跑一个刻意打散 RA 的对照，量出这个假定值多少。
+
+| 池 | θ<24″ 的对 | 观测入盒 | λ | P(≥1) | 打散 RA 对照 |
+| --- | --- | --- | --- | --- | --- |
+| 全池 | 298 / 6.71M | 294 | 0.106 | 0.100 | — |
+| 跨日 (Δt>1 d) | 2 | 1 | **0.0011 ± 0.0331** | **0.0011** | λ = 0 |
+| 跨日 ∧ 同波束 | 2 | 1 | 0.0006 | 0.0006 | λ = 0 |
+
+保耦合版本给出的背景**高于**误差卷积 MC，所以它更保守；产物 `same_beam_coupled_null.json`。
+
+### 步骤 13 — `dm_fingerprint_check.py` DM 指纹离线复算 / dispersion-measure fingerprint
+
+在线 TNS 查询不能离线重跑，但它返回的**名字**可以离线复算：读随包台账 `dm_fingerprint` 条目 + 本地坐标
+（`tns_object_details.csv` 与 Cat2），重算每个同量级 DM 源到本对的角距。区间 [1814.95, 1854.95] 返回 8 个
+FRB（本对 2 个，其他 6 个），最近 40.82°，1° 内 0 个；脚本内置硬断言（n=8 / others=6 / >40° / 1°内 0）。
+这就是稿件里"条件化在视线之后 DM 是否还有信息"那条检验的离线依据。
+
+### 步骤 14–18 — 背景、对照与三个专用量 / background, control, three specialised quantities
 
 | 步 step | 脚本 script | 产物 output | 正文用在哪 where it is used |
 | --- | --- | --- | --- |
-| 12 | `build_isolation_data.py` | `c2_isolation_figure_v1.json` | 最近邻 ECDF、计数实验（图 8 背景）/ nearest-neighbour background |
-| 13 | `known_repeater_control.py` | `known_repeater_control.json` + `_rows.csv` | §5.4：池 83、召回 45/83、候选在第 `20.5` 百分位 / known-repeater control |
-| 14 | `isolation_conv_565d.py` | `pair565_isolation.json` | 图 3 联合孤立性 / joint isolation |
-| 15 | `scatter_565d.py` | `pair565_scatter.json` | 图 6：控制细胞 n=83、33 可测（`40%`）、最小 `5.2 ms`、中位 `31 ms`；τ(1835) ≈ `24 ms`；R = `271` / scattering discriminant |
-| 16 | `period_565d.py` | `pair565_period.json` | Δt = `565.4537 d` = `567.002` 恒星日（距整数 `164 s`）/ sidereal quantization |
+| 14 | `build_isolation_data.py` | `c2_isolation_figure_v1.json` | 最近邻 ECDF、计数实验（图 8 背景）/ nearest-neighbour background |
+| 15 | `known_repeater_control.py` | `known_repeater_control.json` + `_rows.csv` | §5.4：池 83、召回 45/83、候选在第 `20.5` 百分位 / known-repeater control |
+| 16 | `isolation_conv_565d.py` | `pair565_isolation.json` | 图 3 联合孤立性 / joint isolation |
+| 17 | `scatter_565d.py` | `pair565_scatter.json` | 图 6：控制细胞 n=83、33 可测（`40%`）、最小 `5.2 ms`、中位 `31 ms`；τ(1835) ≈ `24 ms`；R = `271` / scattering discriminant |
+| 18 | `period_565d.py` | `pair565_period.json` | Δt = `565.4537 d` = `567.002` 恒星日（距整数 `164 s`）/ sidereal quantization |
 
 **"565 d"不是周期。** CHIME 漂扫使任意两次探测的 Δt 自动接近整数恒星日，因此全文禁用 "periodicity"，
 只说"N 个源中天周期"。别名守卫未把 ρ(565.45)=0.067 判为 flag，这否定的只是"由两暴量周期"。
 565 d is not a period; the ban on the word is deliberate and the alias guard is reported honestly.
 
-### 步骤 17 — `dm_z_inversion.py` DM 预算与红移 / DM budget and redshift
+### 步骤 19 — `dm_z_inversion.py` DM 预算与红移 / DM budget and redshift
 
 Writes `dm_z_inversion.json`. 关系按正文所用形式：`DM_IGM(z) = 1000 ∫₀ᶻ (1+z′)/E(z′) dz′`，Planck 2018；
 `DM_obs = 1834.95 = MW 123.8 + halo 40 + IGM 1671.15` ⇒ **z = 1.517 → 正文写 1.52**；
@@ -336,7 +356,7 @@ Finally the low-z anchors: the measured DM_IGM of the localised bursts at z = 0.
 sits **45 / 38 / 32%** below this relation — stored per-anchor in the JSON and quoted in §4.4 of the
 paper. That direction biases the inversion toward *smaller* z, so 1.5 is a lower edge, not a measurement.
 
-### 步骤 18 — `repro_package.py` 装配复现包（**硬断言**）/ assemble the package, hard asserts
+### 步骤 20 — `repro_package.py` 装配复现包（**硬断言**）/ assemble the package, hard asserts
 
 Writes `reproduction/{README.md, tables/, json/, logs/, MANIFEST.csv}`. 断言 / it aborts unless:
 候选恰 28 对 / exactly 28 pairs; 分量恰 8 / 8 components; 被剔除恰是那 21 对（7 事件组）/ the 21
@@ -344,7 +364,7 @@ removed entries are the audited seven-event group; 主候选地板一致度与�
 ratio matches step 8. `MANIFEST.csv` 记每个文件的字节数与 sha256 / per-file bytes and sha256.
 
 需要 `data/processed/upgrade/tns_search_ledger.jsonl` 与 `tns_search_summary.md`——它们是在线 TNS
-查询的归档输出，**随包提供**，因此第 18 步离线也能完成；没有它们，这一步会在复制日志处失败。
+查询的归档输出，**随包提供**，因此第 20 步离线也能完成；没有它们，这一步会在复制日志处失败。
 The two archived TNS logs ship precisely so that step 18 runs offline.
 
 ---
@@ -421,12 +441,12 @@ python scripts/make_layout_figs2.py                                    # scatter
 - 必须先跑完链路：图读 `c2_null_battery.json`、`event_table_audit.json`、`pair565_isolation.json`、
   `pair565_scatter.json`、`c2_isolation_figure_v1.json`、`g4b_rerun_20261009_v13.json` 与 interim 表。
   Run the chain first; every panel is data-driven.
-- 出图脚本一律按 **15.00 cm** 文本宽设计（`make_figs.py`、`make_layout_figs.py` 都是 `15.0/2.54`），
-  但 `convert_figs.py` 与 `audit_figure_specs.py` 按 **16.2 cm** 折算有效尺寸 ⇒ 同一张图存在两套 dpi/pt 口径，
-  两者读数不可直接互比；统一到版心实测值之前，这是已知不一致（见 §11.6）。
-  每个生成器保存前重跑叠字/碰撞检查（`fig_gate.py`）；`--min-fs 0` 可退回旧字号行为。
-  Generators design at 15.00 cm while conversion and the spec audit scale by 16.2 cm: reconcile before
-  comparing their readings.
+- 版心实测：`raa.cls` 在 **最终排版**下 `textwidth = 145mm`，`[referee]` 下是 200mm；出图脚本一律按
+  **15.00 cm** 设计。`audit_figure_specs.py` 原先写死 16.2 cm（两个分支都不是），已改为 14.5 cm；
+  矢量图的字号直接从 PDF 的 Tf 算子读取，不受该常数影响。
+  Measured: `raa.cls` sets textwidth to 145mm for the final layout and 200mm under [referee];
+  generators design at 15.00 cm. The audit's former 16.2 cm matched neither and is now 14.5 cm.
+  Vector glyph sizes are read from the PDF text operators, so they are unaffected by that constant.
 - 字体只用 matplotlib 自带 DejaVu Sans，**不需要系统字体** ⇒ Linux 上也能出同样的图。
   Bundled DejaVu only, so this works on Linux.
 - 唯一需要 Windows 字体（`msyh.ttc` / `times.ttf`）的是 `build_retext.py` + `retext_figures.py`
@@ -458,8 +478,8 @@ It needs a compiled PDF; use XeLaTeX (pdflatex fails on fontspec):
 PATH="/path/to/MiKTeX/miktex/bin/x64:$PATH"
 xelatex -interaction=nonstopmode -output-directory=_build raa_manuscript_revised.tex   # ×3
 ```
-当前状态 / current: 37 页、三遍 0 错误、`check_tex` ALL CHECKS PASSED、期刊合规审计**硬违规 0**、
-`audit_refs` 33 条 ↔ 33 键无悬空无未引、字母序正确、`audit_manuscript_numbers` **67/67**。
+当前状态 / current: 38 页、三遍 0 错误、`check_tex` ALL CHECKS PASSED、期刊合规审计**硬违规 0**、
+`audit_refs` 33 条 ↔ 33 键无悬空无未引、字母序正确、`audit_manuscript_numbers` **74/74**。
 
 ---
 
@@ -495,7 +515,7 @@ Their outputs ship as archives, so reproducing the text needs no network.
 | 第 5 步 `FileNotFoundError: g4b_report.json` | 漏跑第 4 步 | 用 `run_all.sh`，或先跑 `gate_g4b.py` |
 | 第 7 步 `FileNotFoundError: c2_candidates_v2.parquet` | 漏跑第 6 步 | 先跑 `c2_external_v2.py` |
 | `UnicodeEncodeError: 'gbk' codec ... '\xb2'` | Windows 控制台编码 | `export PYTHONIOENCODING=utf-8`（`run_all.sh` 已设） |
-| 第 18 步在复制 TNS 日志处失败 | 缺 2 个归档件 | 确认 `data/processed/upgrade/tns_search_*` 在包内 |
+| 第 20 步在复制 TNS 日志处失败 | 缺 2 个归档件 | 确认 `data/processed/upgrade/tns_search_*` 在包内 |
 | `AssertionError: 冻结候选应为 28 对，实得 30` | 判据过滤被改动 | 恢复第 5 步的 `dm_window ≤ 5` 过滤；不要改正文 |
 | astropy 提示 polar motion / IERS 过期 | IERS 数据只到装包那天 | 不影响本文数字（`astropy-iers-data` 已在锁里）；可离线设 `Conf.iers_auto_url` |
 | 1 条测试 SKIP | 需要 190 MB 曝光图 | 属预期 / by design |
@@ -515,7 +535,7 @@ Their outputs ship as archives, so reproducing the text needs no network.
    ⇒ 目录赤经是按 `mjd_400`(UTC) 反推的，故 UTC 下 |HA|≈0 属构造结果，不是独立证据。
 4. **排名只主张第一名。** 换地板口径后第 2 名可跌到第 6；第 4–7 名随局部门窗互换。
 5. **DM–z 关系在低红移处系统性偏高 32–45%**（见步骤 17），所以 z 只作下沿；正文已把这层写进去。
-6. **字号地板**：实测 5 张**矢量**版式图最小字号 **4.3–4.9 pt**，低于 7 pt 内部软线（RAA 位图分档
+6. **字号地板**：实测 5 张**矢量**版式图的嵌入字形为 **4.3–4.9 pt**（直接读 PDF 的 Tf 算子，非缩放假象），低于 7 pt 内部软线（RAA 位图分档
    **硬违规 0**）；位图字号无法从像素反读，故不在该项内。属稿件侧待办，不影响数字复现。
 7. **期刊要件仍需作者提供**：仓库链接、AI 工具使用声明与日期、机构邮编、关键词体式。
 8. **图与表的可复现性只到"重出与 PDF 逐像素相同"这一层**；期刊系统的色彩/分档要求由
@@ -561,9 +581,9 @@ for f in sorted((new / "json").glob("*.json")):           # leaf values / 叶子
     print(f"{f.name:28s} leaves={len(a):4d} diff={len(diff):2d} {diff}")
 PY
 ```
-本机 2026-10-11 实测 / observed here: `pytest` 50 passed / 1 skipped / 0 failed；18 步单趟 `CHAIN_RC=0`；
+本机 2026-10-11 实测 / observed here: `pytest` 50 passed / 1 skipped / 0 failed；20 步单趟 `CHAIN_RC=0`；
 三张表与两份 TNS 台账逐字节相同；794 个 JSON 叶子中只有 4 个 `built_at` 不同；6 张位图重出后与论文 PDF
-内嵌图 maxdiff = 0；`audit_manuscript_numbers.py` 67/67。
+内嵌图 maxdiff = 0；`audit_manuscript_numbers.py` 74/74。
 
 **别拿新清单自比 / do not self-validate.** `repro_package.py` 会重写 `reproduction/MANIFEST.csv`，所以用
 新生成的 MANIFEST 校验新文件必然全绿——那种"绿"没有信息量。比对基准必须是**随包那一份** `reproduction/`；
@@ -596,13 +616,14 @@ with the hashes of its inputs, and must exclude anything a build produces:
 | `data/raw/`（公开输入）与 `INPUTS.sha256` | `data/processed/upgrade/` 里由链路重算出的产物 |
 | `reproduction/`（随包派生产物与 `MANIFEST.csv`）、三份文档、`pyproject.toml`、`requirements-verified.txt` | `.venv/`、`__pycache__/`、`.pytest_cache/`、任何本地凭证文件 |
 
-`data/processed/upgrade/` 下的两个 `tns_search_*` 是在线核查的归档输出，**属于随包内容**：第 18 步要
-复制它们才能完成打包，缺了就只能带着凭证重跑 TNS。`.gitignore` 已为它们设了例外。
+`data/processed/upgrade/` 下的两个 `tns_search_*` 是在线核查的归档输出，连同 `tns_object_details.csv` 一起
+**属于随包内容**（`.gitignore` 已为这三个文件设例外）：第 20 步要复制它们才能完成打包，
+而第 13 步的 DM 指纹复算要用到台账与对象明细——缺了就只能带凭证重跑 TNS。
 
 **Self-check before publishing / 对外发布前自查**
 
 ```bash
-git ls-files | wc -l                       # 期望 157
+git ls-files | wc -l                       # 期望 162
 git ls-files | grep -E "local[.]json$|__pycache__|^OUT/|interim/"   # 期望只有 data/interim/.gitkeep
 git ls-files | grep -c "tns_search_"               # 期望 3：两个随包归档件 + 产生它们的脚本
 grep -rn "G:/FRB" --include="*.py" --include="*.sh" . ; echo rc=$?  # 期望 rc=1（无残留绝对路径）
@@ -666,7 +687,7 @@ points where a reader has to be careful about interpretation.
 | 要点 | 说明 |
 | --- | --- |
 | 判据守卫 | 第 5 步只保留 DM 窗 ≤ 5 的档位配置（即论文主张的 28 对判据池），仅由最松档 DM±20 支持的配对另存 `c2_candidates_edge_v1.csv`；更严的 null bar 由第 10 步自己从九档网格重建，两者不混用 |
-| 打包断言 | 第 18 步对 28 对、8 分量、保留 7、剔除 21、主候选地板比 0.1191 逐条硬断言，任一条不符即中止，不产出"差不多"的包 |
+| 打包断言 | 第 20 步对 28 对、8 分量、保留 7、剔除 21、主候选地板比 0.1191 逐条硬断言，任一条不符即中止，不产出"差不多"的包 |
 | 误差地板 | ΔDM 一致度的分母是目录自测的经验地板 1.4826·MAD(D)，形式误差只作并列对照，永不作分母 |
 | p 值语义 | B = 1000 时 0/1000 只能给 `p <= 1/(B+1)`；这是分辨率下限，不是测量值 |
 | 池与时间尺度 | 任何 HA 差值必须同时给事件池与时间尺度：5008 行（UTC）与声明域 3665 给出的比例不同，改用 TDB 则分布近乎均匀 |

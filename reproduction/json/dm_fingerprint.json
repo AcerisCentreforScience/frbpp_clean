@@ -1,0 +1,58 @@
+{
+  "built_at": "2026-10-11T21:26:18+08:00",
+  "source": "tns_search_ledger.jsonl label=dm_fingerprint (archived, not re-queried)",
+  "dm_range_pc_cm3": [
+    1814.95,
+    1854.95
+  ],
+  "n_returned": 8,
+  "n_pair_members": 2,
+  "n_others": 6,
+  "others": [
+    {
+      "name": "FRB20181017D",
+      "deg_from_first": 40.83,
+      "deg_from_second": 40.82,
+      "min_deg": 40.82,
+      "coords_from": "TNS object details"
+    },
+    {
+      "name": "FRB20200514D",
+      "deg_from_first": 43.76,
+      "deg_from_second": 43.77,
+      "min_deg": 43.76,
+      "coords_from": "Catalogue 2 primary row"
+    },
+    {
+      "name": "FRB20200620B",
+      "deg_from_first": 55.4,
+      "deg_from_second": 55.39,
+      "min_deg": 55.39,
+      "coords_from": "Catalogue 2 primary row"
+    },
+    {
+      "name": "FRB20200924A",
+      "deg_from_first": 99.5,
+      "deg_from_second": 99.5,
+      "min_deg": 99.5,
+      "coords_from": "Catalogue 2 primary row"
+    },
+    {
+      "name": "FRB20220616A",
+      "deg_from_first": 58.12,
+      "deg_from_second": 58.13,
+      "min_deg": 58.12,
+      "coords_from": "Catalogue 2 primary row"
+    },
+    {
+      "name": "FRB20230724A",
+      "deg_from_first": 91.19,
+      "deg_from_second": 91.2,
+      "min_deg": 91.19,
+      "coords_from": "Catalogue 2 primary row"
+    }
+  ],
+  "min_separation_deg": 40.82,
+  "n_within_1_deg": 0,
+  "reading": "A comparable dispersion measure is not found near this line of sight in the reporting system, so the dispersion-measure isolation is supported by data independent of the pair's own catalogue entries."
+}
