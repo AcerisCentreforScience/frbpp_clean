@@ -1,0 +1,82 @@
+reproduction	path	what it produces
+# Scripts are tiered by whether the manuscript's numbers depend on them.
+# pipeline      : run by scripts/run_all.sh, in order
+# figures       : drawn from pipeline artefacts
+# online        : needs credentials or a network; archived results ship with the release
+# stage-gate    : acceptance gates of the engine's own stages 0-8, not part of the paper chain
+# one-off       : probes kept for the audit trail; safe to delete
+
+build_interim.py	pipeline	interim tables and provenance manifest
+event_table_dedup_audit.py	pipeline	Section 2 counts
+rerun_v13_event_dedup.py	pipeline	v1.3 event-layer de-duplication grid
+gate_g4b.py	pipeline	criterion grid that formalize_c2 consumes
+formalize_c2.py	pipeline	candidate pairs
+c2_external_v2.py	pipeline	external-catalogue probe on the candidates
+rank_c2_candidates.py	pipeline	pair and hypothesis ranking tables
+dm_sigma_floor.py	pipeline	ranking under the empirical DM floor
+dm_floor_robust.py	pipeline	floor bins, bootstrap intervals, window sensitivity
+c2_null_battery.py	pipeline	permutation nulls and multiplicity
+same_beam_test.py	pipeline	same-beam and correlated-error audit
+build_isolation_data.py	pipeline	nearest-neighbour background for the figure
+known_repeater_control.py	pipeline	known-repeater control statistics
+isolation_conv_565d.py	pipeline	joint isolation of the primary pair
+scatter_565d.py	pipeline	scattering discriminant
+period_565d.py	pipeline	sidereal-day and window tests
+repro_package.py	pipeline	assembles reproduction/ and asserts the headline counts
+
+make_figs.py	figures	fig1-fig6 mechanism panels
+make_fast_advantage.py	figures	FAST follow-up figure
+make_layout_figs.py	figures	dual.pdf, geometry.pdf
+make_layout_figs2.py	figures	scatter.pdf, flow.pdf, roadmap.pdf
+make_graphical_abstract.py	figures	graphical abstract
+make_fig4_svg.py	figures	vector SVG version of the quantisation figure
+check_fig4_svg.py	figures	SVG validation
+fig_gate.py	figures	shared layout and overprint gate
+convert_figs.py	figures	submission formats (PDF and TIF)
+build_retext.py	figures	re-typeset reference figures; needs Windows fonts
+retext_figures.py	figures	text-box erase and redraw helper; needs Windows fonts
+audit_figure_specs.py	figures	resolution and font-size compliance
+raa_figure_fit.py	figures	label-fit check
+
+check_tex.py	manuscript	LaTeX consistency check
+audit_submission.py	manuscript	runs the six audits over a chosen manuscript
+audit_refs.py	manuscript	bibliography cross-check
+audit_floats.py	manuscript	float reference audit
+raa_readiness.py	manuscript	journal compliance auditor
+raa_bibliography.py	manuscript	bibliography style conversion
+raa_citations.py	manuscript	natbib citation rewriting
+raa_titlecase.py	manuscript	title-case conversion
+reorder_bib.py	manuscript	numeric-order bibliography reorder (breaks author-year)
+dump_pdf_text.py	manuscript	PDF text extraction for manual reading
+trial_rescale_figs.py	one-off	type-size rescale experiment
+vec_figs.py	one-off	bitmap-to-vector tracing experiment
+
+fetch_chime.py	online	public CHIME releases
+fetch_external_catalogs.py	online	VizieR TAP catalogue downloads
+fetch_gcn_history.py	online	GCN Kafka retained history
+gcn_live.py	online	GCN live-stream verification
+register_forecast_roll.py	online	forecast generation registration
+scan_newbatch_candidates.py	online	candidate scan over a new batch
+ads_search_565d.py	online	ADS literature check for the pair
+ads_search_113d.py	online	ADS literature check for the 113 d pair
+rm_ads_565d.py	online	ADS check for published RM or scattering
+verify_refs_ads.py	online	ADS bibliography verification, superseded
+verify_refs_ads2.py	online	ADS bibliography verification
+tns_search_565d.py	online	TNS search inside the Cat2 blind window
+tns_object_details.py	online	TNS per-object details
+host_565d.py	online	MAST Pan-STARRS host query for the pair
+host_113d.py	online	MAST Pan-STARRS host query for the 113 d pair
+silence_565d.py	one-off	exposure analysis over the silent gap
+silence_113d.py	one-off	exposure analysis over the silent gap
+epoch565_check.py	one-off	family-epoch recheck inside Cat2
+dm_offset_fast_chime.py	one-off	cross-instrument DM zero-point offset
+dm_z_inversion.py	one-off	Macquart inversion and redshift budget
+calibrate_exposure.py	stage-gate	stage 2 efficiency curve
+gate_g2.py	stage-gate	stage 2 acceptance gate
+gate_g3.py	stage-gate	stage 3 acceptance gate
+gate_g4.py	stage-gate	stage 4 acceptance gate
+gate_g5.py	stage-gate	stage 5 acceptance gate
+gate_g6.py	stage-gate	stage 6 acceptance gate
+gate_g7.py	stage-gate	stage 7 acceptance gate
+gate_g8.py	stage-gate	stage 8 acceptance gate
+period_113d.py	pipeline	sidereal-day and window tests for the 113 d pair

@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "frbpp"
+version = "0.1.0"
+description = "FRB repeater point-process statistics engine (independent project)"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.25",
+    "scipy>=1.13",
+    "astropy>=6.0",
+    "pandas>=2.0",
+    "pyarrow>=15.0",
+    "matplotlib>=3.8",
+    "requests>=2.31",
+    "tqdm>=4.66",
+    "pytz>=2024.1",   # 读取 CHIME Injections 旧 pickle 所需（pandas 反序列化）
+    "h5py>=3.10",     # 读取 injections 全量 h5（5M 合成集; snr_estimate）与束模型
+    "astropy-healpix>=2.0",  # 曝光图（HEALPix nside=4096）像素索引
+]
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+# 可选（设计文档 §3.5）
+extra = ["emcee", "numba"]
+stream = ["confluent-kafka"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+addopts = "-q"
+testpaths = ["tests"]
+pythonpath = ["src"]

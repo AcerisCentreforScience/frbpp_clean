@@ -1,0 +1,6 @@
+{
+  "client_id": "<GCN Kafka client id>",
+  "client_secret": "<GCN Kafka client secret>",
+  "topics": ["frb", "fermi", "swiftburst"],
+  "note": "copy to gcn_kafka.local.json; needed only by gcn_live.py and fetch_gcn_history.py"
+}

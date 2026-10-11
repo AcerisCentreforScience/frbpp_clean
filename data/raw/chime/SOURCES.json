@@ -1,0 +1,69 @@
+{
+  "AstroDataCitationDOI/CISTI.CANFAR/20.0002/data/README": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/20.0002/data/README",
+    "release": "03_180916",
+    "file": "README",
+    "bytes": 2345,
+    "sha256": "9dedeb85046505036e88ee1029ac82bff759260bdf1245744eed0d981787f5eb",
+    "retrieved_at": "2026-10-07T15:16:25+00:00"
+  },
+  "AstroDataCitationDOI/CISTI.CANFAR/20.0002/data/R3_CHIME_TOA_20Feb4.txt": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/20.0002/data/R3_CHIME_TOA_20Feb4.txt",
+    "release": "03_180916",
+    "file": "R3_CHIME_TOA_20Feb4.txt",
+    "bytes": 535,
+    "sha256": "efcb519ea1a531387216de9f880759f13f9e2c7ed03e41c95f9140e37bc13699",
+    "retrieved_at": "2026-10-07T15:16:31+00:00"
+  },
+  "AstroDataCitationDOI/CISTI.CANFAR/20.0002/data/R3_CHIME_exposure.npz": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/20.0002/data/R3_CHIME_exposure.npz",
+    "release": "03_180916",
+    "file": "R3_CHIME_exposure.npz",
+    "bytes": 853072,
+    "sha256": "4fbdce224d5dafce2f93985121bdd3a349b386fe2a5deb0bed077c013c58b73b",
+    "retrieved_at": "2026-10-07T15:16:38+00:00"
+  },
+  "AstroDataCitationDOI/CISTI.CANFAR/22.0005/data/chimefrb_catalog1_injections.p": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/22.0005/data/chimefrb_catalog1_injections.p",
+    "release": "06_injections",
+    "file": "chimefrb_catalog1_injections.p",
+    "bytes": 18614740,
+    "sha256": "244789f9305568dd16ea98e5386316edc49f64972cdb5139613e337431f49c5a",
+    "retrieved_at": "2026-10-07T15:23:05+00:00"
+  },
+  "AstroDataCitationDOI/CISTI.CANFAR/25.0066/data/table/chimefrbcat2.csv": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/25.0066/data/table/chimefrbcat2.csv",
+    "release": "cat2_25",
+    "file": "table/chimefrbcat2.csv",
+    "bytes": 4057396,
+    "sha256": "5108ada779d279a2547d9f9e73ae25bfdd40d8496d6ba7255ec29c6629057a48",
+    "retrieved_at": "2026-10-07T15:24:21+00:00"
+  },
+  "05_cat1::cat1_table2_vizier.tsv": {
+    "url": "https://vizier.cds.unistra.fr/viz-bin/asu-tsv?-source=J/ApJS/257/59/table2&-out.max=unlimited&-out.all",
+    "source": "vizier",
+    "release": "05_cat1",
+    "file": "cat1_table2_vizier.tsv",
+    "bytes": 289394,
+    "sha256": "9fcf28463ba90ae2fafb962673a17297f6a8b04f646ac9793f2167c860a11428",
+    "retrieved_at": "2026-10-07T15:35:22+00:00"
+  },
+  "AstroDataCitationDOI/CISTI.CANFAR/21.0007/data/exposure/exposure_int_20180828_20190702_transit_L_beam_FWHM-600_res_4s_0.86_arcmin.npz": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/21.0007/data/exposure/exposure_int_20180828_20190702_transit_L_beam_FWHM-600_res_4s_0.86_arcmin.npz",
+    "source": "canfar",
+    "release": "05_cat1",
+    "file": "exposure/exposure_int_20180828_20190702_transit_L_beam_FWHM-600_res_4s_0.86_arcmin.npz",
+    "bytes": 12800403,
+    "sha256": "e8cc1a47b916fc5cb89f6df3ea0f07d57d5b2a1b22262e9ead57937100b5966a",
+    "retrieved_at": "2026-10-07T15:59:57+00:00"
+  },
+  "AstroDataCitationDOI/CISTI.CANFAR/22.0005/data/chimefrb_catalog1_injections_full.h5": {
+    "url": "https://www.canfar.net/storage/vault/file/AstroDataCitationDOI/CISTI.CANFAR/22.0005/data/chimefrb_catalog1_injections_full.h5",
+    "source": "canfar",
+    "release": "06_injections",
+    "file": "chimefrb_catalog1_injections_full.h5",
+    "bytes": 1734146224,
+    "sha256": "fb81d1a7dfded05b34d3e3020ef23b9f386740dfec8f95713edfd63f82ebb860",
+    "retrieved_at": "2026-10-07T16:58:24+00:00"
+  }
+}

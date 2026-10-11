@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+
+# derived by the chain, reproducible from data/raw
+data/interim/*
+!data/interim/.gitkeep
+data/processed/*
+!data/processed/.gitkeep
+# archived online-check outputs ship so step 18 runs offline
+!data/processed/upgrade/
+data/processed/upgrade/*
+!data/processed/upgrade/tns_search_ledger.jsonl
+!data/processed/upgrade/tns_search_summary.md
+OUT/
+
+# local credentials
+config/*.local.json

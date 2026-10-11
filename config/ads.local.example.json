@@ -1,0 +1,4 @@
+{
+  "api_token": "<ADS bearer token from https://ui.adsabs.harvard.edu/preferences/api-token/>",
+  "note": "copy to ads.local.json; used by verify_refs_ads*.py and ads_search_*.py"
+}

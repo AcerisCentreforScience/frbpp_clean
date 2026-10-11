@@ -1,0 +1,16 @@
+# Line endings: the tree is LF; shell scripts must stay LF or bash fails on the shebang.
+* text=auto eol=lf
+*.sh   text eol=lf
+*.py   text eol=lf
+*.md   text eol=lf
+*.json text eol=lf
+*.csv  text eol=lf
+*.tsv  text eol=lf
+*.txt  text eol=lf
+# Binary catalogue payloads and images are never text-converted
+*.p    binary
+*.h5   binary
+*.npz  binary
+*.png  binary
+*.tif  binary
+*.parquet binary

@@ -1,0 +1,6 @@
+{
+  "bot_name": "<TNS bot name>",
+  "tns_id": "<TNS bot id>",
+  "api_key": "<TNS api key>",
+  "note": "copy to tns.local.json; the User-Agent sent to the TNS API must be the full tns_marker string returned by the bot registration, a shortened UA is rejected with HTTP 403"
+}
