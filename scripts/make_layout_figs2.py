@@ -14,11 +14,19 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Polygon
-from fig_gate import report_collisions
+from fig_gate import report_collisions as _shared_gate
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "scripts"))
 from make_layout_figs import (CM, H_IN, TEXT_W_IN, C_BLUE, C_GOLD, C_LBLUE,  # noqa: E402
                               C_NAVY, C_RED, C_SLATE)
+
+def report_collisions(fig, name):
+    """Shared layout gate, made fatal: an overprinted figure is not a draft figure."""
+    n = _shared_gate(fig, name)
+    if n:
+        raise SystemExit(f"{name}: {n} 处叠字/越出画布/压数据，图不出文件")
+    return n
+
 
 ROOT = Path(__file__).resolve().parents[1]
 ISO = ROOT / "data/processed/upgrade/c2_isolation_figure_v1.json"
@@ -153,9 +161,10 @@ def report_fit(name: str) -> None:
               f"（已保持地板字号，需缩短文字或放宽框）")
         for s, have, need in FIT_OVERFLOW:
             print(f"     {s!r:36s} 可用 {have} 需要 {need}")
+        bad = len(FIT_OVERFLOW)
         FIT_OVERFLOW.clear()
-    else:
-        print(f"{name}: 全部文字 >= {MIN_PLOT_PT} pt 地板")
+        raise SystemExit(f"{name}: {bad} 处文字放不进 {MIN_PLOT_PT:g} pt 地板，图不出文件")
+    print(f"{name}: 全部文字 >= {MIN_PLOT_PT} pt 地板")
 
 
 def draw_flow(outdir: Path) -> Path:

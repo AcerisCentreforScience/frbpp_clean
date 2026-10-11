@@ -6,27 +6,6 @@ from __future__ import annotations
 import numpy as np
 from matplotlib.text import Text
 
-MIN_FS_DEFAULT = 7.0
-
-
-def fit(ax, x, y, s, size, max_w=0.30, xy=None, min_fs=MIN_FS_DEFAULT, **kw):
-    fig = ax.figure
-    fig.canvas.draw()
-    r = fig.canvas.get_renderer()
-    axw = ax.get_window_extent(renderer=r).width
-    kw.setdefault("clip_on", False)
-    if xy is not None:
-        t = ax.annotate(s, xy=xy, xytext=(x, y), fontsize=size, **kw)
-    else:
-        t = ax.text(x, y, s, fontsize=size, **kw)
-    for _ in range(30):
-        if t.get_window_extent(renderer=r).width <= max_w * axw:
-            break
-        size = max(min_fs * 0.85, size - 0.25)
-        t.set_fontsize(size)
-    return t
-
-
 def all_axes(axes):
     """Every axes in a figure, including insets.
 

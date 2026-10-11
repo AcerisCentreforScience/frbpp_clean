@@ -18,7 +18,15 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from matplotlib.patches import Circle, Ellipse, FancyArrowPatch, FancyBboxPatch
-from fig_gate import fit as gfit, report_collisions
+from fig_gate import report_collisions as _shared_gate
+
+
+def report_collisions(fig, name):
+    """Shared layout gate, made fatal: an overprinted figure is not a draft figure."""
+    n = _shared_gate(fig, name)
+    if n:
+        raise SystemExit(f"{name}: {n} 处叠字/越出画布/压数据，图不出文件")
+    return n
 
 ROOT = Path(__file__).resolve().parents[1]
 CAT2 = ROOT / "data/interim/cat2_bursts.parquet"
