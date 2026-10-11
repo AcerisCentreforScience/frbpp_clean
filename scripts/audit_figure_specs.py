@@ -126,6 +126,31 @@ def retext_min_px(key: str) -> int:
     return min(sizes) if sizes else 0
 
 
+
+def vector_min_label_pt(pdf_path: Path) -> float | None:
+    """Smallest font size among label-like spans of a vector figure, read from the PDF.
+
+    Tick numerals, single characters and exponent-only strings are skipped: a log-axis caption of
+    the form 10^-3 renders its script at 0.7x the label size, which is normal typography and not a
+    legibility failure.
+    """
+    try:
+        import pymupdf
+    except Exception:
+        return None
+    sizes = []
+    with pymupdf.open(str(pdf_path)) as doc:
+        for page in doc:
+            for blk in page.get_text("dict")["blocks"]:
+                for line in blk.get("lines", []):
+                    for span in line.get("spans", []):
+                        txt = span["text"].strip()
+                        if len(txt) < 2 or all(c in "0123456789.\u2212-+eE x" for c in txt):
+                            continue
+                        sizes.append(float(span["size"]))
+    return min(sizes) if sizes else None
+
+
 def main() -> int:
     specs = design_specs()
     hard, soft = [], []
@@ -150,10 +175,7 @@ def main() -> int:
             continue
 
         if ext in VECTOR_EXT:
-            min_pt = None
-            px = retext_min_px(stem)
-            if px and width_cm:
-                min_pt = px / 2048.0 * width_cm / CM_PER_IN * 72.0
+            min_pt = vector_min_label_pt(p)
             if min_pt is not None and min_pt < MIN_PT:
                 soft.append((line_no, name, f"{min_pt:.1f} pt"))
                 print(f"{line_no:>4}  {name:44s} {'矢量':5s} {'-':>14s} {'∞':>9s} "

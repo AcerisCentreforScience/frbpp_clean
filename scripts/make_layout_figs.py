@@ -39,12 +39,12 @@ C_SLATE = "#5f7082"
 
 plt.rcParams.update({
     "font.family": "DejaVu Sans",
-    "font.size": 7.0,
+    "font.size": 7.9,
     "axes.labelsize": 7.5,
     "axes.titlesize": 8.0,
-    "xtick.labelsize": 6.5,
-    "ytick.labelsize": 6.5,
-    "legend.fontsize": 6.5,
+    "xtick.labelsize": 7.3,
+    "ytick.labelsize": 7.3,
+    "legend.fontsize": 7.3,
     "axes.linewidth": 0.7,
     "xtick.major.width": 0.6,
     "ytick.major.width": 0.6,
@@ -89,7 +89,7 @@ def panel_scattering(ax, j, meas):
             label=f"fit predicts {pred_ms:.1f} ms")
     ax.annotate(f"$R \\approx {sc['ratio_R_predicted_over_floor']:.0f}\\times$ above floor",
                 xy=(dm_pair, pred_ms), xytext=(0.03, 0.60),
-                textcoords=ax.transAxes, fontsize=6.5, color=C_GOLD,
+                textcoords=ax.transAxes, fontsize=7.55, color=C_GOLD,
                 ha="left", va="top",
                 arrowprops=dict(arrowstyle="-|>", lw=0.7, color=C_GOLD,
                                 connectionstyle="arc3,rad=-0.16"))
@@ -100,7 +100,7 @@ def panel_scattering(ax, j, meas):
     ax.annotate("no measurable scattering:\nturbulence-screen H2 disfavoured",
                 xy=(dm_pair, floor_ms * 1.1), xytext=(0.03, 0.38),
                 textcoords=ax.transAxes,
-                fontsize=6.5, color=C_RED, ha="left", va="top", linespacing=1.4,
+                fontsize=7.55, color=C_RED, ha="left", va="top", linespacing=1.4,
                 bbox=dict(boxstyle="round,pad=0.22", fc="white", ec="none", alpha=0.85),
                 arrowprops=dict(arrowstyle="-|>", lw=0.8, color=C_RED,
                                 connectionstyle="arc3,rad=0.16"))
@@ -130,17 +130,17 @@ def panel_budget(ax, j):
         yl = y0 + val / 2
         ax.annotate(f"{name} {val:.0f} ({val / dm_obs * 100:.1f}%)",
                     xy=(0.215, yl), xytext=(0.28, yl), ha="left", va="center",
-                    fontsize=6.2, color=C_NAVY,
+                    fontsize=7.45, color=C_NAVY,
                     arrowprops=dict(arrowstyle="-", lw=0.5, color=C_SLATE))
         y0 += val
     ax.text(0.0, dm_obs * 1.045, f"total DM {dm_obs:.2f}", ha="center", va="bottom",
-            fontsize=6.5, color=C_NAVY)
+            fontsize=7.55, color=C_NAVY)
 
     ax.text(0.86, dm_obs * 0.93, "H1: $z \\approx 1.5$\nhigh-redshift repeater",
-            ha="center", va="center", fontsize=6.5, color=C_NAVY, linespacing=1.5,
+            ha="center", va="center", fontsize=7.55, color=C_NAVY, linespacing=1.5,
             bbox=dict(boxstyle="round,pad=0.42", fc="#e8eef7", ec=C_LBLUE, lw=0.7))
     ax.text(0.86, dm_obs * 0.66, "H2: low-redshift\ndense local medium",
-            ha="center", va="center", fontsize=6.5, color=C_NAVY, linespacing=1.5,
+            ha="center", va="center", fontsize=7.55, color=C_NAVY, linespacing=1.5,
             bbox=dict(boxstyle="round,pad=0.42", fc="#eef0f2", ec=C_SLATE, lw=0.7))
     ax.add_patch(FancyArrowPatch((0.22, dm_obs * 0.78), (0.44, dm_obs * 0.90),
                                  arrowstyle="-|>", mutation_scale=7,
@@ -179,13 +179,13 @@ def panel_time(ax):
     ax.text(0.50, 0.925, "Time relation", ha="center", color=C_NAVY,
             fontsize=7.5, weight="bold")
     ax.text(0.50, 0.815, f"$\\Delta t = {dt_days:.4f}$", ha="center",
-            fontsize=7.0, color=C_NAVY)
-    ax.text(0.50, 0.745, "solar days", ha="center", fontsize=6.2, color=C_SLATE)
+            fontsize=7.9, color=C_NAVY)
+    ax.text(0.50, 0.745, "solar days", ha="center", fontsize=7.45, color=C_SLATE)
     ax.text(0.50, 0.645, f"$= {n_sid:.5f}$", ha="center",
-            fontsize=7.0, color=C_NAVY, weight="bold")
-    ax.text(0.50, 0.605, "sidereal days", ha="center", fontsize=6.2, color=C_SLATE)
+            fontsize=7.9, color=C_NAVY, weight="bold")
+    ax.text(0.50, 0.605, "sidereal days", ha="center", fontsize=7.45, color=C_SLATE)
     ax.text(0.50, 0.556, "(164 s from an exact integer)", ha="center",
-            fontsize=5.8, color=C_SLATE)
+            fontsize=7.3, color=C_SLATE)
     ax.add_patch(FancyBboxPatch((0.02, 0.02), 0.96, 0.47,
                                 boxstyle="round,pad=0.012,rounding_size=0.03",
                                 fc="#f6f7f8", ec=C_SLATE, lw=0.7))
@@ -196,7 +196,7 @@ def panel_time(ax):
             "$|\\mathrm{HA}| < 0.5$ h of its\nown transit, so two\n"
             "detections differ by an\ninteger number of sidereal\n"
             "days regardless of\nthe source.",
-            ha="center", va="center", fontsize=6.2, color=C_SLATE, linespacing=1.45)
+            ha="center", va="center", fontsize=7.45, color=C_SLATE, linespacing=1.45)
 
 
 def panel_geometry(ax):
@@ -205,15 +205,15 @@ def panel_geometry(ax):
     ax.text(0, 2.80, "CHIME Fixed Zenith Telescope", ha="center",
             color=C_NAVY, fontsize=7.8, weight="bold")
     ax.text(0, 2.53, "geometry with source declination $\\delta$", ha="center",
-            fontsize=6.8, color=C_NAVY)
+            fontsize=7.7, color=C_NAVY)
 
     earth = Circle((0, 0), 0.62, fc="#dceaf6", ec=C_BLUE, lw=0.9)
     ax.add_patch(earth)
     ax.add_patch(Ellipse((0, 0), 1.24, 0.34, fc="none", ec=C_SLATE, lw=0.7, ls="--"))
     ax.annotate("", xy=(0, 1.16), xytext=(0, -1.16),
                 arrowprops=dict(arrowstyle="-", lw=0.8, color=C_NAVY, ls=(0, (4, 3))))
-    ax.text(0.0, 1.22, "N", ha="center", fontsize=7.0, color=C_NAVY, weight="bold")
-    ax.text(0.0, -1.34, "S", ha="center", fontsize=7.0, color=C_NAVY, weight="bold")
+    ax.text(0.0, 1.22, "N", ha="center", fontsize=7.9, color=C_NAVY, weight="bold")
+    ax.text(0.0, -1.34, "S", ha="center", fontsize=7.9, color=C_NAVY, weight="bold")
     ax.add_patch(FancyArrowPatch((-0.22, 1.06), (0.22, 1.06), connectionstyle="arc3,rad=-0.5",
                                  arrowstyle="-|>", mutation_scale=7, lw=0.9, color=C_NAVY))
     ax.add_patch(FancyArrowPatch((-1.34, -0.14), (-0.92, -0.28), connectionstyle="arc3,rad=0.3",
@@ -221,7 +221,7 @@ def panel_geometry(ax):
     ax.add_patch(FancyArrowPatch((0.92, 0.28), (1.34, 0.14), connectionstyle="arc3,rad=0.3",
                                  arrowstyle="-|>", mutation_scale=8, lw=0.9, color=C_SLATE))
     ax.text(-1.66, -0.86, "Earth's rotation\n(1 sidereal day)", ha="left",
-            fontsize=6.2, color=C_SLATE, linespacing=1.4)
+            fontsize=7.45, color=C_SLATE, linespacing=1.4)
 
     obs = np.array([-0.30, 0.545])
     zen = obs + np.array([0.0, 0.60])
@@ -231,17 +231,17 @@ def panel_geometry(ax):
     ax.plot(*obs, marker="o", ms=3.2, color=C_NAVY, zorder=6)
     ax.annotate("", xy=zen, xytext=obs,
                 arrowprops=dict(arrowstyle="-|>", lw=0.9, color=C_NAVY))
-    ax.text(zen[0] - 0.06, zen[1] + 0.06, "Zenith", ha="right", fontsize=6.2, color=C_SLATE)
+    ax.text(zen[0] - 0.06, zen[1] + 0.06, "Zenith", ha="right", fontsize=7.45, color=C_SLATE)
     ax.annotate("", xy=src, xytext=zen,
                 arrowprops=dict(arrowstyle="-|>", lw=1.0, color=C_BLUE))
     ax.plot(*src, marker="*", ms=10, color=C_BLUE, zorder=6)
     ax.text(src[0] + 0.10, src[1] + 0.02, "Source\n(declination $\\delta$)",
-            ha="left", va="center", fontsize=6.2, color=C_SLATE, linespacing=1.35)
+            ha="left", va="center", fontsize=7.45, color=C_SLATE, linespacing=1.35)
     th = np.linspace(0.0, ang, 24)
     ax.plot(zen[0] + 0.34 * np.sin(th), zen[1] + 0.34 * np.cos(th), color=C_LBLUE, lw=0.9)
     ax.text(zen[0] + 0.15, zen[1] + 0.36, "$\\delta$", fontsize=7.5, color=C_LBLUE)
     ax.annotate("fixed zenith beam\n(transit scan)", xy=(-0.05, 0.30),
-                xytext=(1.66, 0.72), fontsize=6.2, color=C_SLATE, ha="right",
+                xytext=(1.66, 0.72), fontsize=7.45, color=C_SLATE, ha="right",
                 arrowprops=dict(arrowstyle="-|>", lw=0.6, color=C_SLATE,
                                 connectionstyle="arc3,rad=-0.2"))
 
@@ -250,7 +250,7 @@ def panel_discriminants(ax):
     rows = [
         ("Phase stability", "drifts", "stable"),
         ("Multi-source", "source-dep.", "universal"),
-        ("Period 565 vs 567", "not integer", "integerized"),
+        ("Period 565 vs 567", "not integer", "integer"),
         ("Rotation link", "none", "direct"),
         ("Predictive power", "limited", "high"),
         ("Instrument robustness", "sensitive", "robust"),
@@ -265,18 +265,18 @@ def panel_discriminants(ax):
     ax.add_patch(plt.Rectangle((0.0, top - rowh), 1.0, rowh, fc="#eef4fb",
                                ec="none", linewidth=0))
     for x, h in zip(xs, heads):
-        ax.text(x + 0.014, top - rowh / 2, h, fontsize=6.2, color=C_NAVY,
+        ax.text(x + 0.014, top - rowh / 2, h, fontsize=7.45, color=C_NAVY,
                 weight="bold", va="center")
     for i, (feat, phys, geo) in enumerate(rows):
         y = top - rowh * (i + 1)
         if i % 2 == 0:
             ax.add_patch(plt.Rectangle((0.0, y - rowh), 1.0, rowh, fc="#f8fafc",
                                        ec="none", linewidth=0))
-        ax.text(xs[0] + 0.014, y - rowh / 2, feat, fontsize=6.0, va="center",
+        ax.text(xs[0] + 0.014, y - rowh / 2, feat, fontsize=7.35, va="center",
                 color=C_NAVY)
-        ax.text(xs[1] + 0.014, y - rowh / 2, phys, fontsize=6.0, va="center",
+        ax.text(xs[1] + 0.014, y - rowh / 2, phys, fontsize=7.35, va="center",
                 color=C_SLATE)
-        ax.text(xs[2] + 0.014, y - rowh / 2, "\u2713 " + geo, fontsize=6.0,
+        ax.text(xs[2] + 0.014, y - rowh / 2, "\u2713 " + geo, fontsize=7.35,
                 va="center", color=C_BLUE)
     ax.plot([0, 1, 1, 0, 0], [top, top, top - rowh * 8, top - rowh * 8, top],
             color=C_LBLUE, lw=0.7)
