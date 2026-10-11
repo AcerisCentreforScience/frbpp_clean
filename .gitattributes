@@ -3,10 +3,6 @@
 *.sh   text eol=lf
 *.py   text eol=lf
 *.md   text eol=lf
-*.json text eol=lf
-*.csv  text eol=lf
-*.tsv  text eol=lf
-*.txt  text eol=lf
 # Binary catalogue payloads and images are never text-converted
 *.p    binary
 *.h5   binary
@@ -14,3 +10,11 @@
 *.png  binary
 *.tif  binary
 *.parquet binary
+
+# Machine-generated data is stored byte-for-byte: its manifest hashes are computed on the
+# exact bytes the writer produced, so git must not normalise line endings inside them.
+*.csv  -text
+*.json -text
+*.jsonl -text
+*.tsv  -text
+*.parquet -text

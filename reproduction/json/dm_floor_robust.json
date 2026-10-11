@@ -1,0 +1,311 @@
+{
+  "built_at": "2026-10-11T13:25:51+08:00",
+  "n_comparable": 4961,
+  "reference_pair": {
+    "names": [
+      "FRB20200511C",
+      "FRB20211128E"
+    ],
+    "dm_mean": 1834.952,
+    "ddm": 0.17688324101300168
+  },
+  "bins_csv": "c2_dm_floor_bins_v1.csv",
+  "fracs": [
+    0.15,
+    0.25,
+    0.4
+  ],
+  "formal_error_optimism": {
+    "n_with_err": 4961,
+    "frac_absD_gt_formal_err": 0.9613,
+    "ratio_of_medians_range": [
+      7.8,
+      46.8
+    ],
+    "median_of_ratios_range": [
+      8.0,
+      72.8
+    ],
+    "overall_median_of_ratios": 27.2,
+    "note": "正文原写'每个 DM 分箱里形式误差都偏小 30--45 倍'，分箱实测不支持：最高约 47 倍（700--900），最低的箱（200--300，n=974）只有约 8 倍。故此处并列给出两种定义（中位数之比、逐事件比的中位数）与全表分位数。"
+  },
+  "min_local_n": 60,
+  "logic_convention": "s=1.4826·MAD(D) 局部窗；σ_comb=√2·s 为保守约定",
+  "window_frac_0.15": {
+    "used_frac": 0.15,
+    "n_local": 107,
+    "s_hat": 1.2635,
+    "sigma_comb_hat": 1.7869,
+    "s_boot_ci95": [
+      0.9153,
+      1.9271
+    ],
+    "ratio_loose_DMs": 0.14,
+    "ratio_loose_ci95": [
+      0.0918,
+      0.1933
+    ],
+    "ratio_conservative_DMsqrt2": 0.099,
+    "ratio_conservative_ci95": [
+      0.0649,
+      0.1367
+    ],
+    "boot_draws": 2000,
+    "seed": 20261011
+  },
+  "window_frac_0.25": {
+    "used_frac": 0.25,
+    "n_local": 239,
+    "s_hat": 1.0501,
+    "sigma_comb_hat": 1.4851,
+    "s_boot_ci95": [
+      0.8805,
+      1.3485
+    ],
+    "ratio_loose_DMs": 0.1684,
+    "ratio_loose_ci95": [
+      0.1312,
+      0.2009
+    ],
+    "ratio_conservative_DMsqrt2": 0.1191,
+    "ratio_conservative_ci95": [
+      0.0928,
+      0.1421
+    ],
+    "boot_draws": 2000,
+    "seed": 20261011
+  },
+  "window_frac_0.4": {
+    "used_frac": 0.4,
+    "n_local": 536,
+    "s_hat": 0.8663,
+    "sigma_comb_hat": 1.2251,
+    "s_boot_ci95": [
+      0.7669,
+      1.02
+    ],
+    "ratio_loose_DMs": 0.2042,
+    "ratio_loose_ci95": [
+      0.1734,
+      0.2306
+    ],
+    "ratio_conservative_DMsqrt2": 0.1444,
+    "ratio_conservative_ci95": [
+      0.1226,
+      0.1631
+    ],
+    "boot_draws": 2000,
+    "seed": 20261011
+  },
+  "top3_by_window_and_convention": {
+    "r_formal_F15": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.354,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20211127E x FRB20220623D",
+        "ratio": 1.4879,
+        "dt_days": 207.43
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 3.3878,
+        "dt_days": 113.69
+      }
+    ],
+    "r_formal_F25": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.354,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20211127E x FRB20220623D",
+        "ratio": 1.4879,
+        "dt_days": 207.43
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 3.3878,
+        "dt_days": 113.69
+      }
+    ],
+    "r_formal_F40": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.354,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20211127E x FRB20220623D",
+        "ratio": 1.4879,
+        "dt_days": 207.43
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 3.3878,
+        "dt_days": 113.69
+      }
+    ],
+    "rA_F15": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.1401,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20200814C x FRB20210829A",
+        "ratio": 0.5685,
+        "dt_days": 379.96
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 0.7419,
+        "dt_days": 113.69
+      }
+    ],
+    "rA_F25": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.1686,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20200814C x FRB20210829A",
+        "ratio": 0.561,
+        "dt_days": 379.96
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 0.7452,
+        "dt_days": 113.69
+      }
+    ],
+    "rA_F40": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.2043,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20200814C x FRB20210829A",
+        "ratio": 0.5425,
+        "dt_days": 379.96
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 0.7615,
+        "dt_days": 113.69
+      }
+    ],
+    "rB_F15": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.0991,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20200814C x FRB20210829A",
+        "ratio": 0.402,
+        "dt_days": 379.96
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 0.5246,
+        "dt_days": 113.69
+      }
+    ],
+    "rB_F25": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.1192,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20200814C x FRB20210829A",
+        "ratio": 0.3967,
+        "dt_days": 379.96
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 0.527,
+        "dt_days": 113.69
+      }
+    ],
+    "rB_F40": [
+      {
+        "rank": 1,
+        "pair": "FRB20200511C x FRB20211128E",
+        "ratio": 0.1445,
+        "dt_days": 565.45
+      },
+      {
+        "rank": 2,
+        "pair": "FRB20200814C x FRB20210829A",
+        "ratio": 0.3836,
+        "dt_days": 379.96
+      },
+      {
+        "rank": 3,
+        "pair": "FRB20200919A x FRB20210111A",
+        "ratio": 0.5385,
+        "dt_days": 113.69
+      }
+    ]
+  },
+  "stability": {
+    "rank1_identical_in_all_cells": true,
+    "top3_formal_vs_conservative": {
+      "formal": [
+        "FRB20200511C x FRB20211128E",
+        "FRB20200919A x FRB20210111A",
+        "FRB20211127E x FRB20220623D"
+      ],
+      "conservative": [
+        "FRB20200511C x FRB20211128E",
+        "FRB20200814C x FRB20210829A",
+        "FRB20200919A x FRB20210111A"
+      ]
+    },
+    "top3_changes_with_sigma_convention": true,
+    "top3_identical_within_conservative_conv": true,
+    "top3_identical_within_loose_conv": true,
+    "note": "只有第一名在所有 6 个格子里不变；前三名的**组成**随 σ 约定变化（形式误差下第二名的一个成员报了被高估的逐事件误差），所以正文只主张第一名，其余按无序集合处理。"
+  },
+  "catalogue_consistency": {
+    "file": "data\\raw\\chime\\cat2_25\\chimefrbcat2.csv",
+    "both_columns_present": true,
+    "n_bonsai": 5045,
+    "n_fitb": 4961,
+    "median_D": 0.449,
+    "frac_D_gt_formal_err_median": 0.9821,
+    "checkable": "同一发布文件内两列同时存在、可比样本与 D 的分布",
+    "not_checkable": "跨 release 的 bonsai_dm/dm_fitb 定义是否变过，无法从单个文件核实；本文所有地板统计只基于这一份文件，换 release 需重算"
+  }
+}

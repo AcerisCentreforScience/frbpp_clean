@@ -1,0 +1,67 @@
+{
+  "config": {
+    "thetas": [
+      60.0,
+      180.0,
+      600.0
+    ],
+    "dm_windows": [
+      1.0,
+      5.0,
+      20.0
+    ],
+    "n_shuffle": 200,
+    "dec_bins": 8,
+    "n_eff_trials": 9
+  },
+  "models": {
+    "ra": {
+      "name": "RA置换(Dec分层)",
+      "n_reps": 1000,
+      "cand_mean": 0.187,
+      "cand_p95": 1.0,
+      "cand_max": 10.0,
+      "real_cand": 30,
+      "n_ge_real": 0,
+      "single_p": 0.000999000999000999,
+      "global_p_bonferroni": 0.008991008991008992
+    },
+    "dm": {
+      "name": "DM置换(保分布洗牌)",
+      "n_reps": 1000,
+      "cand_mean": 0.003,
+      "cand_p95": 0.0,
+      "cand_max": 3.0,
+      "real_cand": 30,
+      "n_ge_real": 0,
+      "single_p": 0.000999000999000999,
+      "global_p_bonferroni": 0.008991008991008992
+    },
+    "ra_dm": {
+      "name": "RA+DM置换",
+      "n_reps": 1000,
+      "cand_mean": 0.152,
+      "cand_p95": 1.0,
+      "cand_max": 8.0,
+      "real_cand": 30,
+      "n_ge_real": 0,
+      "single_p": 0.000999000999000999,
+      "global_p_bonferroni": 0.008991008991008992
+    },
+    "full": {
+      "name": "完全随机化",
+      "n_reps": 1000,
+      "cand_mean": 0.231,
+      "cand_p95": 1.0,
+      "cand_max": 9.0,
+      "real_cand": 30,
+      "n_ge_real": 0,
+      "single_p": 0.000999000999000999,
+      "global_p_bonferroni": 0.008991008991008992
+    }
+  },
+  "reference_bar": "30-pair union over the five significant grid configurations (stricter than the 28-pair set claimed)",
+  "single_test_p": "p <= 1/(B+1) = 0.001 at B=1000 (resolution limit, not a measurement)",
+  "global_p": "p <= 0.009 after Bonferroni x 9 grid configurations",
+  "known_gap": "the battery's own JSON does not embed its seed; see mc_settings.json"
+}

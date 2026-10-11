@@ -1,0 +1,74 @@
+{
+  "pool": "P1 Cat2 localized, dedup by event_id",
+  "n_sources": 83,
+  "n_recovered": 45,
+  "recovery_rate": 0.5422,
+  "A_thetaClosest_formal": {
+    "n": 83,
+    "median": 4.972,
+    "lt1_frac": 0.1446,
+    "p90": 103.31
+  },
+  "A_thetaClosest_floor": {
+    "n": 83,
+    "median": 0.583,
+    "lt1_frac": 0.5904,
+    "p90": 3.755
+  },
+  "B_minRatio_formal": {
+    "n": 83,
+    "median": 1.405,
+    "lt1_frac": 0.4819,
+    "p90": 49.779
+  },
+  "B_minRatio_floor": {
+    "n": 83,
+    "median": 0.099,
+    "lt1_frac": 0.7349,
+    "p90": 2.328
+  },
+  "min_theta_arcsec": {
+    "median": 459.6,
+    "lt30_frac": 0.1807,
+    "lt600_frac": 0.5542
+  },
+  "A_formal_recoveredOnly": {
+    "n": 45,
+    "median": 3.211,
+    "lt1_frac": 0.2
+  },
+  "A_floor_recoveredOnly": {
+    "n": 45,
+    "median": 0.354,
+    "lt1_frac": 0.7333
+  },
+  "candidate": {
+    "theta": 23.9,
+    "ddm": 0.1769,
+    "sigma_formal": 0.5003,
+    "sigma_floor": 1.4156,
+    "r_formal": 0.3536,
+    "r_floor": 0.125,
+    "percentile_formal": 0.0843,
+    "percentile_floor": 0.2048
+  },
+  "note_percentile_direction": "percentile = 分布中比该候选更松的比例; 越小表示该候选比典型真重复源更紧",
+  "positive_control_denominators": {
+    "cat2_sources": 83,
+    "cat1_only_sources": [
+      "FRB20121102A",
+      "FRB20190116B"
+    ],
+    "total_85": 85,
+    "note": "85 = 83 (Catalog 2) + 2 (Catalog 1 only)，与 §3.3 分母构造一致"
+  },
+  "positive_control_miss_reasons": {
+    "counts": {
+      "角距>600″（逐暴定位散布）": 37,
+      "已召回": 45,
+      "DM 差>±5 容差": 1
+    },
+    "convention": "事件层池（与候选搜索同池：28 对是事件级去重结果，非行级 44）",
+    "note": "38 个漏检中 37 个因源内无任何 θ<600″ 的对，恰 1 个因 θ<600″ 内 ΔDM 超 ±5；故'全部漏检均因定位散布、无一因 DM'须软化为'37/38 因定位散布'。行级口径召回 61/83、合并去重口径 55/83，差异仅来自是否计入子暴行。"
+  }
+}

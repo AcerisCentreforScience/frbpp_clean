@@ -1,0 +1,27 @@
+{
+  "same_beam_error_convolution": {
+    "draws": 400,
+    "seed": 20261011
+  },
+  "dm_floor_bootstrap": {
+    "draws": 2000,
+    "seed": 20261011
+  },
+  "null_battery": {
+    "B_per_model": 1000,
+    "seed_constant": 20261009,
+    "rerun": "python scripts/c2_null_battery.py --seed 20261009",
+    "seed_recorded_in": "the --seed default of argparse in scripts/c2_null_battery.py",
+    "known_gap": "the script writes its products without the seed, so the seed is recovered from the source, not from the JSON"
+  },
+  "generators": [
+    "scripts/formalize_c2.py",
+    "scripts/c2_null_battery.py",
+    "scripts/dm_sigma_floor.py",
+    "scripts/dm_floor_robust.py",
+    "scripts/same_beam_test.py",
+    "scripts/build_isolation_data.py",
+    "scripts/event_table_dedup_audit.py",
+    "scripts/tns_search_565d.py"
+  ]
+}

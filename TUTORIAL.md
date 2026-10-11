@@ -1,23 +1,40 @@
-# frbpp reproduction release — detailed bilingual tutorial
-# frbpp 复现发布版 — 超详细中英双语教程
+# frbpp reproduction package — detailed guide
+# frbpp 复现发布包 — 详细说明文档
 
-> **Which folder may be published? / 可公开的文件夹是哪一个？**
-> `G:\FRB\frbpp_clean` — 28 MB, 28 library modules, 72 scripts, 13 tests, 10 public input files.
-> This is the only tree that has been stripped of working commentary, de-pathed, and run end to end
-> on a foreign path with a fresh environment.
-> 这是唯一一份：删掉了工作注释、去掉了绝对路径、并在"换盘 + 换路径 + 全新环境"下整链跑通的树。
->
-> `G:\FRB\frbpp` is the **working** repository (Chinese working comments, 1.9 GB of raw data, NOTES
-> dossier). Do not publish it as-is. `G:\FRB\frbpp_release` and `C:\Users\Admin\reprotest\frbpp`
-> are verification rigs.
-> `G:\FRB\frbpp` 是**工作库**（含中文工作注释、1.9 GB 原始数据、NOTES 卷宗），不要原样公开；
-> `frbpp_release` 与 `reprotest\frbpp` 是验证台架。
->
-> `README.md` and `RUNBOOK.md` are the English, reviewer-facing versions. This file is the
-> detailed hands-on version.
-> `README.md` / `RUNBOOK.md` 是面向审稿人的英文简版；本文件是手把手详版。
+This document is the long-form, hands-on companion to
+[README.md](README.md) and the compact [RUNBOOK.md](RUNBOOK.md). It states, for every published
+number, which script produces it, which artefact field holds it, and how to check it; it also
+states plainly what this release does not establish.
+本文件是 [README.md](README.md) 与简版 [RUNBOOK.md](RUNBOOK.md) 的详版配套文档：对每一个发表过的数字，
+写明由哪个脚本产生、存在哪个产物字段、如何核对；同时也明确写出这份发布**不能**证明什么。
+
+The repository contains code, the public inputs, and the derived artefacts only. The manuscript
+itself is not part of this repository; the auditors in section 8 run against a local copy of it.
+仓库只含代码、公开输入与派生产物；论文正文不在本仓库内，第 8 节的核对脚本是对本地论文副本运行的。
+
+## Contents / 目录
+
+0. [What this release reproduces / 能复现什么](#0)
+1. [Quick start / 三分钟跑起来](#1)
+2. [Layout / 目录结构](#2)
+3. [Inputs / 输入数据](#3)
+4. [The 18 steps, one by one / 十八步逐步详解](#4)
+5. [Frozen conventions / 冻结口径](#5)
+6. [Re-deriving one number / 想核对某一个数](#6)
+7. [Regenerating the figures / 重出图](#7)
+8. [Manuscript-side audits / 论文侧核对脚本](#8)
+9. [Optional online checks / 在线核查（可选）](#9)
+10. [Troubleshooting / 故障排查](#10)
+11. [Honest limits / 边界](#11)
+12. [How this release was verified / 验证方法](#12)
+13. [Obtaining and archiving / 获取与存档](#13)
+14. [Glossary / 术语对照](#14)
+15. [FAQ / 常见问题](#15)
+16. [Design notes / 设计与可复现性要点](#16)
 
 ---
+
+<a id="0"></a>
 
 ## 0. 这份东西能复现什么 / What this release reproduces
 
@@ -44,6 +61,8 @@ virtual environment; the rebuilt `reproduction/` matches the shipped one byte-fo
 6 张位图重出后与投稿 PDF 内嵌图逐像素相同；`audit_manuscript_numbers.py` **67/67 一致**。
 
 ---
+
+<a id="1"></a>
 
 ## 1. 三分钟跑起来 / Quick start (three minutes)
 
@@ -103,13 +122,15 @@ primary pair DeltaDM/sigma_floor = 0.1191 (matches the artefact)
 
 ---
 
+<a id="2"></a>
+
 ## 2. 目录结构 / Layout
 
 ```
 frbpp_clean/
-├── README.md                  面向审稿人的英文简版 / reviewer-facing English summary
+├── README.md                  仓库首页：范围、上手、文档索引 / repository front page
 ├── RUNBOOK.md                 步骤表 + 口径 + 已修的稿件问题 / step table + conventions + corrections
-├── TUTORIAL.md                本文件 / this file
+├── TUTORIAL.md                本文件：详细说明 / this document
 ├── pyproject.toml             包定义（src 布局）/ package definition (src layout)
 ├── requirements-verified.txt  实测环境的精确版本锁 / exact versions everything was run with
 ├── INPUTS.sha256              10 个输入文件的哈希 / hashes of the 10 shipped inputs
@@ -130,6 +151,8 @@ frbpp_clean/
 `stage-gate`（引擎自有验收门）/ `one-off`（一次性探针）。只有前两类在复现路径上。
 
 ---
+
+<a id="3"></a>
 
 ## 3. 输入数据 / Inputs
 
@@ -176,6 +199,8 @@ catalogue releases; nothing here depends on private or embargoed data.
 全部为公开发表目录，不依赖任何私有或禁运数据。
 
 ---
+
+<a id="4"></a>
 
 ## 4. 十八步链路逐步详解 / The 18 steps, one by one
 
@@ -324,6 +349,8 @@ The two archived TNS logs ship precisely so that step 18 runs offline.
 
 ---
 
+<a id="5"></a>
+
 ## 5. 冻结口径（不要漂移）/ Frozen conventions (do not drift)
 
 | 项 Item | 值 Value |
@@ -340,6 +367,8 @@ The two archived TNS logs ship precisely so that step 18 runs offline.
 | 目录文件 Catalogue file | 只认 `chimefrbcat2.csv` 这一份；换发布版本必须重算地板统计 |
 
 ---
+
+<a id="6"></a>
 
 ## 6. 想核对某一个数怎么下手 / How to re-derive one number
 
@@ -379,6 +408,8 @@ failure mode to design against: a false green is worse than a red.
 
 ---
 
+<a id="7"></a>
+
 ## 7. 重出图 / Regenerating the figures
 
 ```bash
@@ -407,10 +438,12 @@ python scripts/make_layout_figs2.py                                    # scatter
 
 ---
 
+<a id="8"></a>
+
 ## 8. 稿件侧的审计脚本 / Manuscript-side audits
 
-发布包**不含稿件**（只含代码与派生数据），所以这三条要在你自己的 tex 上跑：
-The release ships code and derived data, not the manuscript, so point these at your own tex.
+本仓库不含论文源文件（只有代码与派生数据），所以下面三条要对本地的论文副本运行：
+This repository ships code and derived data, not the manuscript, so point these at a local copy of it.
 
 ```bash
 python scripts/check_tex.py   docs/submission/raa_manuscript_revised.tex   # 结构一致性 / structure
@@ -429,6 +462,8 @@ xelatex -interaction=nonstopmode -output-directory=_build raa_manuscript_revised
 `audit_refs` 33 条 ↔ 33 键无悬空无未引、字母序正确、`audit_manuscript_numbers` **67/67**。
 
 ---
+
+<a id="9"></a>
 
 ## 9. 在线核查（可选，需凭证）/ Optional online checks needing credentials
 
@@ -451,6 +486,8 @@ Their outputs ship as archives, so reproducing the text needs no network.
 
 ---
 
+<a id="10"></a>
+
 ## 10. 故障排查 / Troubleshooting
 
 | 症状 symptom | 原因 cause | 处置 fix |
@@ -465,6 +502,8 @@ Their outputs ship as archives, so reproducing the text needs no network.
 | 出图字体警告 | 用了系统字体名 | 本包只用 DejaVu；出现警告说明改过 `fig_gate`/rcParams |
 
 ---
+
+<a id="11"></a>
 
 ## 11. 这份发布的边界 / Honest limits
 
@@ -483,6 +522,8 @@ Their outputs ship as archives, so reproducing the text needs no network.
    `audit_figure_specs.py` 判，它需要 `docs/figures` 目录在位。
 
 ---
+
+<a id="12"></a>
 
 ## 12. 我怎么验证这份发布 / How this release was verified (and how to repeat it)
 
@@ -530,23 +571,45 @@ PY
 
 ---
 
-## 13. 打包上传 / Packaging
+<a id="13"></a>
+
+## 13. 获取与存档 / Obtaining and archiving
+
+**Clone / 克隆**
 
 ```bash
-cd .. && tar czf frbpp_clean.tar.gz --exclude='frbpp_clean/.venv' \
-    --exclude='frbpp_clean/OUT' --exclude='frbpp_clean/data/interim/*' \
-    --exclude='frbpp_clean/data/processed/upgrade/*.json' \
-    --exclude='frbpp_clean/data/processed/upgrade/*.csv' \
-    --exclude='frbpp_clean/**/__pycache__' frbpp_clean
+git clone https://github.com/AcerisCentreforScience/frbpp_clean.git
+cd frbpp_clean
 ```
-发布前自检 / check before publishing:
-- `config/` 里只有 `*.example.json` / examples only;
-- 无 `data/raw/**` 之外的私有数据 / no private data;
-- `grep -r "local.json" --include="*.py" .` 命中的都是示例路径 / only example paths;
-- `INPUTS.sha256` 与 `data/raw` 对得上 / hashes match;
-- 全文没有绝对路径 / no absolute paths: `grep -rn "G:/FRB\|C:\\\\" --include="*.py" .` 应为空。
+
+**Deposit snapshot / 期刊或存档用的快照.** A deposit should freeze the source at one commit together
+with the hashes of its inputs, and must exclude anything a build produces:
+
+| 纳入 include | 排除 exclude |
+| --- | --- |
+| `src/`, `scripts/`, `tests/`, `config/` 下的 example 模板 | `OUT/`、`data/interim/` 里的 parquet 与 manifest |
+| `data/raw/`（公开输入）与 `INPUTS.sha256` | `data/processed/upgrade/` 里由链路重算出的产物 |
+| `reproduction/`（随包派生产物与 `MANIFEST.csv`）、三份文档、`pyproject.toml`、`requirements-verified.txt` | `.venv/`、`__pycache__/`、`.pytest_cache/`、任何本地凭证文件 |
+
+`data/processed/upgrade/` 下的两个 `tns_search_*` 是在线核查的归档输出，**属于随包内容**：第 18 步要
+复制它们才能完成打包，缺了就只能带着凭证重跑 TNS。`.gitignore` 已为它们设了例外。
+
+**Self-check before publishing / 对外发布前自查**
+
+```bash
+git ls-files | wc -l                       # 期望 141
+git ls-files | grep -E "local[.]json$|__pycache__|^OUT/|interim/"   # 期望只有 data/interim/.gitkeep
+git ls-files | grep -c "tns_search_"               # 期望 3：两个随包归档件 + 产生它们的脚本
+grep -rn "G:/FRB" --include="*.py" --include="*.sh" . ; echo rc=$?  # 期望 rc=1（无残留绝对路径）
+sha256sum -c INPUTS.sha256                 # 期望 10 个输入文件全部 OK（Windows 用 Get-FileHash 比对）
+```
+
+最后一条最关键：哈希不符说明手里的目录数据不是产出这些结果的那一版发布，应当停止复现并重新取数
+（见 [§3](#3)），而不是继续把差异解释掉。
 
 ---
+
+<a id="14"></a>
 
 ## 14. 术语对照 / Glossary
 
@@ -570,6 +633,8 @@ cd .. && tar czf frbpp_clean.tar.gz --exclude='frbpp_clean/.venv' \
 
 ---
 
+<a id="15"></a>
+
 ## 15. 常见问题 / FAQ
 
 **Q: 为什么我看到 28 对，又看到 30 对？**
@@ -586,15 +651,27 @@ in separate files, and step 18 asserts the 28.
 
 ---
 
-## 16. 这份发布相对工作库改了什么 / What differs from the working repository
+<a id="16"></a>
 
-| 类别 category | 改动 change |
+## 16. 设计与可复现性要点 / Design notes
+
+These are the mechanisms that make the numbers reproducible rather than incidental, plus the two
+points where a reader has to be careful about interpretation.
+
+| 要点 | 说明 |
 | --- | --- |
-| 注释 comments | `#` 979 → 138 条（其中 125 条是 `noqa`/`coding`/shebang，删了会坏 lint 与导入）；docstring 1465 → 263 行；**论证性文字 0 行**。剥离**当时**的去-docstring AST 对全部 112 个现存文件逐一相同 ⇒ 该步只动注释；**其后**又有 7 个文件做了有意的非注释改动（5 个 CWD 路径文件、`formalize_c2` 判据、`dm_z_inversion` 重写），所以现在再比会出现这 7 处差异——它们是下几行的内容，不是注释剥离造成的。 |
-| 可移植 portability | 18 处硬编码 `Path("G:/FRB/frbpp")` 改为 `Path(__file__).resolve().parents[1]`；9 处依赖当前工作目录的裸相对路径同样改为仓库相对；`run_all.sh` 强制 UTF-8。 |
-| 链路 chain | 补登两个前置（第 4、6 步）；新增第 17 步 `dm_z_inversion.py`；`repro_package` 顺延为第 18 步；随包提供两个 TNS 归档件使第 18 步可离线完成。 |
-| 判据 criterion | 第 5 步恢复"DM 窗 ≤ 5"过滤，使产物等于论文主张的 28 对；边缘两对另存审计文件。 |
-| 红移 redshift | `dm_z_inversion.py` 改用正文所述前因子 1000（原为自推的 1118.7），并写出带宽、系统项网格与低红移锚点偏差；现在逐位复现 z = 1.52、[1.21,1.84]、[1.05,2.01]。 |
-| 新脚本 new | `scripts/run_all.sh`（链）与 `scripts/audit_manuscript_numbers.py`（正文↔产物逐条对账）。 |
-| 删除 removed | `_sweep_vec.py`、`test_nature_figure_fig4.py`、`retext_spec.py`（纯 docstring 文件，真正的换字规格数据在 `build_retext.py` 的 `SPEC_*` 里）。 |
-| 稿件 manuscript | **本包不含稿件**。工作副本 `raa_manuscript_revised.tex` 已改：Petroff 卷期 `30, 2`；DR2 增引 Flewelling 2020；计数处的 Zhang 引用摘除；5045 = 4539 暴 + 506 子暴；预算表 `formal <0.001`；§4.4 补标定域说明。`raa_manuscript.tex`（冻结正式稿）未动。 |
+| 判据守卫 | 第 5 步只保留 DM 窗 ≤ 5 的档位配置（即论文主张的 28 对判据池），仅由最松档 DM±20 支持的配对另存 `c2_candidates_edge_v1.csv`；更严的 null bar 由第 10 步自己从九档网格重建，两者不混用 |
+| 打包断言 | 第 18 步对 28 对、8 分量、保留 7、剔除 21、主候选地板比 0.1191 逐条硬断言，任一条不符即中止，不产出"差不多"的包 |
+| 误差地板 | ΔDM 一致度的分母是目录自测的经验地板 1.4826·MAD(D)，形式误差只作并列对照，永不作分母 |
+| p 值语义 | B = 1000 时 0/1000 只能给 `p <= 1/(B+1)`；这是分辨率下限，不是测量值 |
+| 池与时间尺度 | 任何 HA 差值必须同时给事件池与时间尺度：5008 行（UTC）与声明域 3665 给出的比例不同，改用 TDB 则分布近乎均匀 |
+| 角距不是证据 | 23.9 角秒在任何相关系数 ρ 下都远小于合成 1σ 误差，只作选择器使用，正文措辞是两个误差盒与重合相容 |
+| 关系标定域 | 第 17 步的 DM–z 关系在 z < 0.7 的已定位样本上高估 32–45%，故 z 只作"色散量是宇宙学的"下沿指示；脚本把朴素前因子与所用前因子并排打印，12% 的差异可见而非隐藏 |
+| 可移植性 | 所有脚本以脚本自身位置定位仓库根目录，无绝对路径、无当前工作目录依赖；`run_all.sh` 强制 UTF-8 输出 |
+| 依赖锁定 | `requirements-verified.txt` 锁到产出结果的那一套版本，`pyproject.toml` 只给下限 |
+
+Two properties of the underlying catalogue constrain reading rather than computation, and are worth
+repeating: hour angles cluster near transit because CHIME drift-scans, so an interval close to an
+integer number of sidereal days is a property of the instrument, not of the source; and per-burst
+localisation boxes overlap far more widely than the 23.9 arcsecond separation, so a small angle
+selects candidates rather than demonstrates an association.

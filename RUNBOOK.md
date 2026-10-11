@@ -135,8 +135,8 @@ Both consequences were then corrected in the manuscript (2026-10-11):
 
 ## Manuscript corrections this release accompanies
 
-The release ships code and derived data only, not the manuscript; the corrections below were made in
-the working copy of the paper and are recorded here so the two stay linked.
+This repository ships code and derived data only, not the manuscript; the corrections below were made
+to the accompanying paper and are recorded here so the two stay linked.
 
 | Item | Audit claim | Checked against | Outcome |
 | --- | --- | --- | --- |
@@ -146,6 +146,8 @@ the working copy of the paper and are recorded here so the two stay linked.
 | Chen et al. 2026 `RAA 26, 115016` | volume/article not independently confirmed | ADS `2026RAA....26.115016C` | confirmed published; no change |
 | Catalogue 2 "at burst level (5045 rows)" | 4539 bursts in the official abstract | our own CSV: 5045 rows = 4539 bursts + 506 sub-burst rows, 37 unlocalized | reworded to rows/bursts/sub-bursts |
 | formal DM error on z | table said `+-0.02` | `dm_z_inversion.py` gives 0.0005; the section's own prose says `<0.001` | corrected to `<0.001` |
+
+<a id="verification"></a>
 
 ## Verification actually performed
 

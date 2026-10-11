@@ -1,0 +1,159 @@
+{
+  "built_at": "2026-10-11T13:51:31+08:00",
+  "purpose": "审稿 A3：23.9″ 是否为同束/相关系统误差的自然产物",
+  "data_gaps": [
+    "Cat2 无 beam/beamformer/zenith-angle 列，束身份用 |ΔHA|<0.1 h 近似",
+    "Cat2 只有 ra_err/dec_err，无误差相关系数 ⇒ 相关性只能做 ρ 敏感性扫描，不是真协方差",
+    "θ 的联合分布用球面角距；抖动按各事件 1σ 高斯，逐轴独立"
+  ],
+  "observed_pair": {
+    "names": [
+      "FRB20200511C",
+      "FRB20211128E"
+    ],
+    "theta_arcsec": 23.86,
+    "ddm": 0.1769,
+    "theta_cut": 24.0,
+    "ddm_cut": 0.18
+  },
+  "ha_stats": {
+    "n": 3665,
+    "median_abs_ha_h": 0.05,
+    "frac_abs_ha_lt_0p1_h": 0.7599,
+    "frac_abs_ha_lt_0p5_h": 0.9225,
+    "p90_abs_ha_h": 0.2653,
+    "declared_domain_note": "以上是声明域(3665)口径，同样按 utc",
+    "all_cat2_rows": {
+      "n": 5008,
+      "median_abs_ha_h": 0.0488,
+      "frac_abs_ha_lt_0p1_h": 0.7885,
+      "note": "§4.3 正文与 Fig 4c 图注的'全目录'数出自此口径"
+    },
+    "pair_abs_dha_h": 0.0462,
+    "same_source_dha": {
+      "median_abs_dha_h": 0.0416,
+      "n_pairs": 124793,
+      "n_sources": 83,
+      "definition": "已命名源内部两两 |ΔHA|（折到 ≤12 h）的中位数"
+    },
+    "time_column_control": {
+      "median_abs_ha_h_mjd_400_utc": 0.0488,
+      "median_abs_ha_h_t_bjd_tdb": 11.6815,
+      "note": "mjd_400(UTC) 下 |HA| 集中在凌日窗，t_bjd_tdb 下近乎均匀 ⇒ 赤经反推用的是 mjd_400，不是 BJD_TDB"
+    },
+    "definitional_caveat": "CHIME 为漂扫仪器，Cat2 的赤经由到达时间反推（RA≈该时刻地方恒星时），故 |HA|≈0 与 Δt 落在整数恒星日上属目录构造的结果，不能当作独立证据；本文只把它用作'为什么不能把 565 d 读成物理周期'的守卫。"
+  },
+  "pools": [
+    {
+      "pool": "all domain pairs",
+      "n_pairs": 6714280,
+      "P_theta_lt_24": 4.438e-05,
+      "P_theta_and_ddm": 4.37873e-05,
+      "expected_count_theta_and_ddm": 294.0,
+      "median_theta_arcsec": 201012.28
+    },
+    {
+      "pool": "cross-day pairs (excl. same-night)",
+      "n_pairs": 6705151,
+      "P_theta_lt_24": 3e-07,
+      "P_theta_and_ddm": 1.491e-07,
+      "expected_count_theta_and_ddm": 1.0,
+      "median_theta_arcsec": 201021.53
+    },
+    {
+      "pool": "same-beam proxy |dHA|<0.1 h",
+      "n_pairs": 4126373,
+      "P_theta_lt_24": 7.222e-05,
+      "P_theta_and_ddm": 7.1249e-05,
+      "expected_count_theta_and_ddm": 294.0,
+      "median_theta_arcsec": 222024.29
+    },
+    {
+      "pool": "same-beam AND cross-day",
+      "n_pairs": 4120578,
+      "P_theta_lt_24": 4.9e-07,
+      "P_theta_and_ddm": 2.427e-07,
+      "expected_count_theta_and_ddm": 1.0,
+      "median_theta_arcsec": 222036.04
+    },
+    {
+      "pool": "different-beam pairs",
+      "n_pairs": 2587907,
+      "P_theta_lt_24": 0.0,
+      "P_theta_and_ddm": 0.0,
+      "expected_count_theta_and_ddm": 0.0,
+      "median_theta_arcsec": 173977.25
+    }
+  ],
+  "rho_sensitivity": [
+    {
+      "rho": 0.0,
+      "sigma_rel_ra_arcsec": 746.1,
+      "sigma_rel_dec_arcsec": 1190.9,
+      "sigma_rel_comb_arcsec": 993.7,
+      "theta_over_sigma_rel": 0.024
+    },
+    {
+      "rho": 0.3,
+      "sigma_rel_ra_arcsec": 625.1,
+      "sigma_rel_dec_arcsec": 996.6,
+      "sigma_rel_comb_arcsec": 831.8,
+      "theta_over_sigma_rel": 0.0287
+    },
+    {
+      "rho": 0.6,
+      "sigma_rel_ra_arcsec": 474.1,
+      "sigma_rel_dec_arcsec": 753.7,
+      "sigma_rel_comb_arcsec": 629.6,
+      "theta_over_sigma_rel": 0.0379
+    },
+    {
+      "rho": 0.9,
+      "sigma_rel_ra_arcsec": 242.7,
+      "sigma_rel_dec_arcsec": 378.1,
+      "sigma_rel_comb_arcsec": 317.7,
+      "theta_over_sigma_rel": 0.0751
+    },
+    {
+      "rho": 0.99,
+      "sigma_rel_ra_arcsec": 95.5,
+      "sigma_rel_dec_arcsec": 124.3,
+      "sigma_rel_comb_arcsec": 110.8,
+      "theta_over_sigma_rel": 0.2153
+    }
+  ],
+  "error_convolved_counts": {
+    "draws": 400,
+    "seed": 20261011,
+    "all_pairs": {
+      "median": 3.0,
+      "mean": 3.1525,
+      "p95": 6.0,
+      "max": 9,
+      "P_ge_1": 0.9925
+    },
+    "same_beam": {
+      "median": 3.0,
+      "mean": 3.1525,
+      "p95": 6.0,
+      "max": 9,
+      "P_ge_1": 0.9925
+    },
+    "cross_day": {
+      "median": 0.0,
+      "mean": 0.0,
+      "p95": 0.0,
+      "max": 0,
+      "P_ge_1": 0.0
+    },
+    "note": "承重的限制是**跨日**而不是同束：小 θ 背景对里绝大多数是同夜碎片；且本目录里 θ 小的对必然同凌日窗（不同束的对 θ 极大），所以'同束'过滤对小 θ 池几乎是空操作——不能拿它当独立条件。"
+  },
+  "verdict": {
+    "same_beam_lift_vs_all": 1.628,
+    "pools_compared": {
+      "numerator": "same-beam AND cross-day",
+      "denominator": "cross-day pairs (excl. same-night)"
+    },
+    "reading": "同为跨日池的前提下，再加同束条件后 θ<24″∧|ΔDM|<0.18 的条件率倍数。接近 1 ⇒ 小 θ 不是束造成的；远大于 1 ⇒ 审稿人的担心成立。"
+  }
+}
