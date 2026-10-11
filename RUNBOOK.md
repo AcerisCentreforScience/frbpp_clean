@@ -82,7 +82,9 @@ the floor instead of shrinking further and the run exits non-zero if any string 
 while the shared gate in `fig_gate.py` exits non-zero if any block overprints a neighbouring
 label - text inside inset axes included - crosses the canvas or sits on top of data points,
 and writes nothing in that case.
-Rendering is deterministic: two independent runs produce byte-identical PNGs. Fonts are the
+Rendering is deterministic: two independent runs produce byte-identical PNGs. The vector
+PDFs embed a creation timestamp, so their reproducibility check is per-span text and size
+equality against the copies the paper embeds (5/5 match), not bytes. Fonts are the
 bundled DejaVu Sans; nothing here needs a system font.
 
 The manuscript embeds `docs/figures/hires/*.png` and `docs/figures/vector2/*.pdf`. The submission
