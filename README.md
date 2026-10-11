@@ -69,7 +69,8 @@ chain never has to reach the network.
 Rebuilt on a clean machine from a fresh environment: the 20 steps complete with exit code 0, the
 regenerated `reproduction/` matches the shipped tables byte for byte and the shipped JSON
 artefacts in every value except four `built_at` timestamps, the six raster figures regenerate
-pixel-identical to those in the compiled paper, and `scripts/audit_manuscript_numbers.py`
+byte-for-byte across independent renders while holding a 7.30 pt type floor (7.06 pt as
+printed), and `scripts/audit_manuscript_numbers.py`
 confirms 74 of 74 published quantities against the recomputed artefacts. Details in
 [RUNBOOK.md](RUNBOOK.md#verification) and [TUTORIAL.md § 12](TUTORIAL.md#12).
 

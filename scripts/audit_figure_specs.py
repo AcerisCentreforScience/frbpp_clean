@@ -1,6 +1,6 @@
 """Check every figure against the journal resolution and font-size requirements.
 
-Usage: python scripts/audit_figure_specs.py
+Usage: python scripts/audit_figure_specs.py [path/to/raa_manuscript.tex]
 """
 from __future__ import annotations
 
@@ -11,7 +11,10 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-TEX = ROOT / "docs" / "submission" / "raa_manuscript.tex"
+# The manuscript can live in another tree (the release ships code, not the paper):
+# pass its path as argv[1].
+TEX = Path(sys.argv[1]) if len(sys.argv) > 1 else \
+    ROOT / "docs" / "submission" / "raa_manuscript.tex"
 # raa.cls sets textwidth to 145mm for the final layout (200mm under [referee]); the
 # generators design at 15.00 cm, so print scales figures by 14.5/15.0.
 TEXT_W_CM = 14.5
@@ -76,55 +79,31 @@ def tex_figures() -> list[tuple[int, str, bool]]:
     return out
 
 
-def design_specs():
-    specs: dict[str, tuple[float, float, float]] = {}
-    mg = (ROOT / "scripts" / "make_figs.py").read_text(encoding="utf-8")
-    for m in re.finditer(r"\ndef (\w+)\(", mg):
-        blk = mg[m.start(): (mg.find("\ndef ", m.start() + 1) % len(mg)) or len(mg)]
-        f = re.search(r"figsize=\(([0-9.]+),\s*[0-9.]+\)", blk)
-        fs = [float(x) for x in re.findall(r"fontsize=([0-9.]+)", blk)]
-        base = re.search(r'"font\.size":\s*([0-9.]+)', blk)
-        base = float(base.group(1)) if base else 7.0
-        if f and fs:
-            specs[m.group(1)] = (float(f.group(1)), min(fs), base)
-    mf = (ROOT / "scripts" / "make_fast_advantage.py").read_text(encoding="utf-8")
-    f = re.search(r"figsize=\(([0-9.]+),\s*[0-9.]+\)", mf)
-    fs = [float(x) for x in re.findall(r"fontsize=([0-9.]+)", mf)]
-    base = re.search(r'"font\.size"\]\s*=\s*([0-9.]+)', mf)
-    if f and fs:
-        specs["make_fast_advantage"] = (float(f.group(1)), min(fs),
-                                        float(base.group(1)) if base else 7.0)
-    return specs
+def raster_floor(gen: Path) -> tuple[float, float] | None:
+    """Read the design width (cm) and type floor (pt) a raster generator declares.
+
+    Pixels cannot reveal a font size, so the auditor does not try to guess one from the PNG:
+    it takes the floor the generator enforces (and aborts on) and scales it to the text block
+    the figure is actually inserted at.
+    """
+    src = gen.read_text(encoding="utf-8")
+    w = re.search(r"PRINT_W\s*=\s*([0-9.]+)\s*/\s*2\.54", src)
+    f = re.search(r"MIN_FS\s*=\s*([0-9.]+)", src)
+    if not (w and f):
+        return None
+    return float(w.group(1)), float(f.group(1))
 
 
-FIG_FN = {
-    "fig2_event_dedup_mechanism": "fig2",
-    "fig3_joint_isolation": "fig3",
-    "fig4_sidereal_quantization": "fig4",
-    "fig5_null_battery": "fig5_null_battery",
-    "fig6_scattering_discriminant": "fig6",
-    "fig8_fast_advantage": "make_fast_advantage",
-}
+RASTER_GEN = {"fig8_fast_advantage": "make_fast_advantage.py"}
 
 
-RETEXT_SPEC = {"flow": "SPEC_FLOW", "geometry": "SPEC_GEOM", "dual": "SPEC_DUAL",
-               "scatter": "SPEC_SCATTER", "roadmap": "SPEC_ROADMAP",
-               "composite": "SPEC_COMPOSITE"}
-
-
-def retext_min_px(key: str) -> int:
-    txt = (ROOT / "scripts" / "build_retext.py").read_text(encoding="utf-8")
-    var = RETEXT_SPEC.get(key)
-    if not var:
-        return 0
-    s = txt.find(f"{var} = [")
-    if s < 0:
-        return 0
-    e = txt.find("\n]", s)
-    blk = txt[s: e if e > 0 else len(txt)]
-    sizes = [int(x) for x in re.findall(r'S\("lat",\s*(\d+)', blk)]
-    return min(sizes) if sizes else 0
-
+def raster_min_pt(stem: str, width_cm: float | None) -> float | None:
+    gen = ROOT / "scripts" / RASTER_GEN.get(stem, "make_figs.py")
+    floor = raster_floor(gen)
+    if not floor or width_cm is None:
+        return None
+    design_cm, floor_pt = floor
+    return floor_pt * width_cm / design_cm
 
 
 def vector_min_label_pt(pdf_path: Path) -> float | None:
@@ -153,11 +132,11 @@ def vector_min_label_pt(pdf_path: Path) -> float | None:
                     sizes.append(max(z for _, z in spans))
     return min(sizes) if sizes else None
 def main() -> int:
-    specs = design_specs()
     hard, soft = [], []
     print(f"版心宽 {TEXT_W_CM} cm = {TEXT_W_CM/CM_PER_IN:.3f} in"
           f"   |   RAA 分档：彩色 {DPI_COLOUR:.0f} / 黑白 {DPI_GREY:.0f} / 线条 {DPI_LINE:.0f} dpi"
-          f"   |   软线 {MIN_PT:.0f} pt（字号，内部要求）")
+          f"   |   软线 {MIN_PT:.0f} pt（字号，内部要求）"
+          f"   |   位图字号取自生成器地板（{TEXT_W_CM:.1f}/{15.0:.1f} 缩放）")
     print("=" * 108)
     print(f"{'行':>4}  {'文件':44s} {'类型':5s} {'像素/设计宽':>14s} "
           f"{'有效dpi':>9s} {'最小字号pt':>10s}  判定")
@@ -182,23 +161,16 @@ def main() -> int:
                 print(f"{line_no:>4}  {name:44s} {'矢量':5s} {'-':>14s} {'∞':>9s} "
                       f"{min_pt:>10.1f}  OK 矢量（RAA 位图分档不适用）  ~ 字号 {min_pt:.1f} pt < {MIN_PT:.0f}")
             else:
+                shown = f"{min_pt:.1f}" if min_pt is not None else "未量到"
                 print(f"{line_no:>4}  {name:44s} {'矢量':5s} {'-':>14s} {'∞':>9s} "
-                      f"{'-':>10s}  OK 矢量，RAA 位图分档不适用")
+                      f"{shown:>10s}  OK 矢量，RAA 位图分档不适用")
             continue
 
         size, dpi = png_size_dpi(p)
         w_px = size[0]
         eff_dpi = w_px / (width_cm / CM_PER_IN) if width_cm else None
 
-        min_pt = None
-        if stem in FIG_FN:
-            spec = specs.get(FIG_FN[stem])
-            if spec:
-                fw_in, fs_min, base = spec
-                scale = (width_cm / CM_PER_IN) / fw_in
-                min_pt = min(fs_min, base) * scale
-        elif retext_min_px(stem):
-            min_pt = retext_min_px(stem) / w_px * width_cm / CM_PER_IN * 72.0
+        min_pt = raster_min_pt(stem, width_cm)
 
         colour = is_colour(p)
         tier = DPI_COLOUR if colour else DPI_GREY

@@ -55,10 +55,11 @@ DM 预算及其红移；565 d ↔ 567.002 恒星日的量化；以及全部 11 �
 
 **Verified / 实测状态.** 20/20 steps exit 0 in one invocation on a different drive with a fresh
 virtual environment; the rebuilt `reproduction/` matches the shipped one byte-for-byte except four
-`built_at` fields; the six raster figures regenerate pixel-identical to the compiled PDF (maxdiff 0);
+`built_at` fields; two independent renders of the six raster figures are byte-identical and every
+string holds the 7.30 pt type floor;
 `audit_manuscript_numbers.py` reports **74/74** agreeing quantities.
 在换盘 + 全新虚拟环境下 20/20 步 exit 0；重建的 `reproduction/` 与随包件**只差 4 个 `built_at`**；
-6 张位图重出后与论文 PDF 内嵌图逐像素相同；`audit_manuscript_numbers.py` **74/74 一致**。
+6 张位图两次独立重出逐字节相同（sha256 一致），每张都守住 7.30 pt 字号地板；`audit_manuscript_numbers.py` **74/74 一致**。
 
 ---
 
@@ -457,9 +458,15 @@ python scripts/make_layout_figs2.py                                    # scatter
 - 唯一需要 Windows 字体（`msyh.ttc` / `times.ttf`）的是 `build_retext.py` + `retext_figures.py`
   的换字支线，**不在正文复现路径上**。
   Only the retext branch needs Windows fonts, and it is off the reproduction path.
-- 实测：在"换盘 + 全新环境"下重出的 6 张位图与论文 PDF 内嵌图**逐像素 maxdiff = 0**；
-  5 张矢量图所画文字与磁盘版本零差异。
-  Measured: 6 rasters pixel-identical to the PDF's (maxdiff 0), 5 vectors text-identical.
+- 实测：6 张位图两次独立重出**逐字节相同**（sha256 一致），全部守住 **7.30 pt 地板**
+  （15.0 cm 设计宽 → 印到 14.5 cm 版心是 7.06 pt）；5 张矢量图按 PDF 字形实测 **7.3 pt**；
+  位图与上一版投稿 PDF **有意不同**：地板逼着改版式（fig2 标题与注记用词、fig3 示意列标题和
+  主配对标签挪进空白带、fig4 图例换边与 P(...) 断行、fig8 最长柱上方留白），
+  **画进去的数字一个没变**。
+  Measured: the 6 rasters are byte-identical across two independent renders and every string
+  holds the 7.30 pt floor (7.06 pt as printed); the 5 vectors measure 7.3 pt per PDF glyph. The
+  rasters differ from the previous submission PDF on purpose - layout only, no drawn number
+  changed.
 
 ---
 
@@ -475,6 +482,7 @@ python scripts/check_tex.py   docs/submission/raa_manuscript_revised.tex   # 结
 python scripts/audit_refs.py  docs/submission/raa_manuscript_revised.tex   # 文献↔引用双向、字母序
 python scripts/audit_submission.py raa_manuscript_revised                  # 九项期刊合规
 python scripts/audit_manuscript_numbers.py --tex ...                       # 数字↔产物（§6）
+python scripts/audit_figure_specs.py   docs/submission/raa_manuscript_revised.tex  # 分档+地板
 ```
 `audit_submission.py` 需要 `docs/submission/<stem>.tex` 与 `docs/submission/_build/<stem>.pdf`，
 即必须先编译（**XeLaTeX**，`pdflatex` 因 fontspec 会致命失败）：
@@ -484,7 +492,7 @@ PATH="/path/to/MiKTeX/miktex/bin/x64:$PATH"
 xelatex -interaction=nonstopmode -output-directory=_build raa_manuscript_revised.tex   # ×3
 ```
 当前状态 / current: 38 页、三遍 0 错误、`check_tex` ALL CHECKS PASSED、期刊合规审计**硬违规 0**、
-`audit_refs` 33 条 ↔ 33 键无悬空无未引、字母序正确、`audit_manuscript_numbers` **74/74**。
+`audit_refs` 33 条 ↔ 33 键无悬空无未引、字母序正确、`audit_figure_specs` 硬违规 0 / 软提醒 0（位图印成 7.1 pt、矢量实测 7.3 pt）、`audit_manuscript_numbers` **74/74**。
 
 ---
 

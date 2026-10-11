@@ -68,7 +68,7 @@ Steps 02 and 04 are not optional: `formalize_c2.py` reads `g4b_report.json`, and
 
 ```bash
 python scripts/make_figs.py --only fig2,fig3,fig4,fig5,fig6 --dpi 900 --outdir docs/figures/hires
-python scripts/make_fast_advantage.py --dpi 900 --outdir docs/figures
+python scripts/make_fast_advantage.py --dpi 900 --outdir docs/figures/hires
 python scripts/make_layout_figs.py  --outdir docs/figures/vector2     # dual.pdf, geometry.pdf
 python scripts/make_layout_figs2.py                                   # scatter/flow/roadmap.pdf
 ```
@@ -76,8 +76,13 @@ python scripts/make_layout_figs2.py                                   # scatter/
 They read the artefacts above (`c2_null_battery.json`, `event_table_audit.json`,
 `pair565_isolation.json`, `pair565_scatter.json`, `c2_isolation_figure_v1.json`,
 `g4b_rerun_20261009_v13.json` and the interim tables), so run the chain first. Each generator
-prints a collision report before saving and enforces a 7 pt floor. Fonts are the bundled
-DejaVu Sans; nothing here needs a system font.
+draws at a 15.0 cm design width with a **7.30 pt type floor**, which is 7.06 pt once the paper
+scales it into its 14.5 cm text block. The floor is enforced, not requested: `fit()` clamps at
+the floor instead of shrinking further and the run exits non-zero if any string cannot hold it,
+while the shared gate in `fig_gate.py` exits non-zero if any block overprints a neighbouring
+label, crosses the canvas or sits on top of data points - and writes nothing in that case.
+Rendering is deterministic: two independent runs produce byte-identical PNGs. Fonts are the
+bundled DejaVu Sans; nothing here needs a system font.
 
 The manuscript embeds `docs/figures/hires/*.png` and `docs/figures/vector2/*.pdf`. The submission
 conversion path (`convert_figs.py`, which writes `figures_submission/*.pdf` and `*.tif`) also
@@ -171,5 +176,5 @@ Run in a copy of this tree at a different path with a fresh virtual environment 
 | pair-level chance rate under a coupling-preserving null | cross-day joint box lambda = 0.0011 +/- 0.0331, P(>=1) = 0.0011 over 20000 DM permutations; randomising right ascension instead gives lambda = 0, so the coupling-preserving null is the conservative one |
 | rebuilt `reproduction/` vs the shipped one | tables byte-identical (`events_frozen.csv` 5014 rows, `candidates_28pairs.csv` 28, `dm_floor_bins.csv` 12) and both TNS log files byte-identical; 794 JSON leaves compared, the only differences are 4 `built_at` timestamps |
 | `audit_manuscript_numbers.py` | 74 of 74 quantities agree with the recomputed artefacts, including the anchor deviations and the catalogue row/burst split |
-| figures regenerated from the recomputed artefacts | all 6 raster panels are pixel-identical (maxdiff 0) to the images embedded in the current 38-page paper; the 5 vector panels were re-laid out to clear the 7.30 pt label floor and now report 0 hard and 0 soft findings (their label text therefore differs from the earlier submission PDF by design) |
+| figures regenerated from the recomputed artefacts | two independent renders of the 6 raster panels at 900 dpi are byte-identical (sha256 match), and those are the files the 38-page paper embeds; every raster string holds the 7.30 pt floor (7.06 pt as printed) with 0 overprints, and the 5 vector panels measure 7.3 pt per PDF glyph. Holding the floor re-laid the rasters out on purpose - fig2 heading and note wording, fig3 schematic headings plus the pair label moved into the empty band, fig4 legend side and the P(...) wrap, fig8 headroom above the longest bar - and no drawn number changed |
 | timings | null battery 872 s, same-beam audit 639 s, coupling-preserving null 8 s, fingerprint recheck 1 s, everything else seconds; whole chain ~27 min |

@@ -14,6 +14,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, FancyArrowPatch, FancyBboxPatch, Rectangle
+from matplotlib.text import Text
 from matplotlib.lines import Line2D
 import astropy.units as u
 from astropy.coordinates import EarthLocation, SkyCoord
@@ -23,16 +24,27 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from frbpp.upgrade.crossmatch import (build_event_table, geometry_pairs,  # noqa: E402
                                       LOGIC_VERSION, same_event_mask)
+from fig_gate import report_collisions as _shared_gate  # noqa: E402
+
+def report_collisions(fig, name):
+    """Shared layout gate, made fatal: an overprinted raster is not a draft figure."""
+    n = _shared_gate(fig, name)
+    if n:
+        raise SystemExit(f"{name}: {n} 处叠字/越出画布/压数据，位图不出图")
+    return n
+
 
 FIGDIR = ROOT / "docs" / "figures"
 
-MIN_FS = 7.0
+MIN_FS = 7.30
 PRINT_W = 15.0 / 2.54
 
 
 def SZ(w, h):
     return (PRINT_W, h * PRINT_W / w)
 
+
+FIT_OVERFLOW: list[tuple[str, float, float]] = []
 
 def FS(v):
     return float(max(MIN_FS, float(v)))
@@ -46,51 +58,35 @@ def fit(ax, x, y, s, size, max_w=0.30, xy=None, **kw):
     kw.setdefault("clip_on", False)
     t = (ax.annotate(s, xy=xy, xytext=(x, y), fontsize=size, **kw) if xy is not None
          else ax.text(x, y, s, fontsize=size, **kw))
+    floor = float(MIN_FS)
+
+    def text_w():
+        return Text.get_window_extent(t, renderer=r).width
+
     for _ in range(28):
-        if t.get_window_extent(renderer=r).width <= max_w * axw:
+        if text_w() <= max_w * axw:
             break
-        size = max(MIN_FS * 0.85, size - 0.3)
+        if floor and size - 0.3 < floor:
+            t.set_fontsize(floor)
+            FIT_OVERFLOW.append((str(s)[:34], round(max_w * axw, 1), round(text_w(), 1)))
+            return t
+        size -= 0.3
         t.set_fontsize(size)
     return t
 
 
-def report_collisions(fig, name):
-    fig.canvas.draw()
-    r = fig.canvas.get_renderer()
-    items = []
-    for ax in fig.axes:
-        lg = ax.get_legend()
-        tagged = ([("text", t) for t in ax.texts]
-                  + [("tick", t) for t in list(ax.get_xticklabels())
-                                     + list(ax.get_yticklabels())]
-                  + [("axis", t) for t in (ax.xaxis.label, ax.yaxis.label, ax.title)]
-                  + [("legend", t) for t in (list(lg.get_texts()) if lg else [])])
-        for kind, t in tagged:
-            s = t.get_text().strip() if hasattr(t, "get_text") else ""
-            if not s:
-                continue
-            try:
-                items.append((kind, s.replace("\n", " ")[:34],
-                              t.get_window_extent(renderer=r)))
-            except Exception:
-                pass
-    hits = []
-    for i in range(len(items)):
-        for j in range(i + 1, len(items)):
-            ka, sa, a = items[i]
-            kb, sb, b = items[j]
-            if ka in ("tick", "axis") and kb in ("tick", "axis"):
-                continue
-            if len(sa.strip()) <= 1 or len(sb.strip()) <= 1:
-                continue
-            ox = max(0.0, min(a.x1, b.x1) - max(a.x0, b.x0))
-            oy = max(0.0, min(a.y1, b.y1) - max(a.y0, b.y0))
-            ov = ox * oy
-            if ov > 0.15 * min(a.width * a.height, b.width * b.height):
-                hits.append((sa, sb))
-    for x, y in hits:
-        print(f"   !! {name} 文本叠字: {x!r} <-> {y!r}")
-    return len(hits)
+def report_fit(name: str) -> None:
+    if not FIT_OVERFLOW:
+        print(f"{name}: 全部文字 >= {MIN_FS:g} pt 地板")
+        return
+    print(f"!! {name}: {len(FIT_OVERFLOW)} 处文字在 {MIN_FS:g} pt 地板下放不进（已保持地板字号，"
+          f"需缩短文字或放宽框）")
+    for s, have, need in FIT_OVERFLOW:
+        print(f"     {s!r:36s} 可用 {have} 需要 {need}")
+    bad = len(FIT_OVERFLOW)
+    FIT_OVERFLOW.clear()
+    raise SystemExit(f"{name}: {bad} 处文字放不进 {MIN_FS:g} pt 地板，位图不出图")
+
 
 UP = ROOT / "data" / "processed" / "upgrade"
 INTERIM = ROOT / "data" / "interim"
@@ -131,7 +127,7 @@ def load(v13=True):
 
 def fig1():
     inv = json.loads((UP / "g4b_rerun_20261009_v13.json").read_text(encoding="utf-8"))
-    fig, ax = plt.subplots(figsize=SZ(7.4, 5.0))
+    fig, ax = plt.subplots(figsize=SZ(7.4, 7.4))
     ax.set_axis_off()
     ax.set_xlim(0, 100); ax.set_ylim(0, 100)
 
@@ -181,27 +177,26 @@ def fig1():
         ax.add_patch(FancyBboxPatch((x_l, y), w_l, bh,
                                     boxstyle="round,pad=0.15,rounding_size=1.1",
                                     facecolor="white", edgecolor=col, lw=1.05, zorder=2))
-        ax.text(x_l + 1.6, yc + bh * 0.30, title, fontsize=7.1, fontweight="bold",
+        ax.text(x_l + 1.6, yc + bh * 0.30, title, fontsize=FS(7.1), fontweight="bold",
                 color=col, va="center")
-        ax.text(x_l + 1.6, yc + bh * 0.03, op, fontsize=5.9, color="0.28", va="center")
-        ax.text(x_l + 1.6, yc - bh * 0.28, "-> " + out, fontsize=5.9, color=C_INK,
+        ax.text(x_l + 1.6, yc + bh * 0.03, op, fontsize=FS(5.9), color="0.28", va="center")
+        ax.text(x_l + 1.6, yc - bh * 0.28, "-> " + out, fontsize=FS(5.9), color=C_INK,
                 va="center", fontweight="bold")
         ax.add_patch(FancyBboxPatch((x_r, y), w_r, bh,
                                     boxstyle="round,pad=0.15,rounding_size=1.1",
                                     facecolor=col, alpha=0.08, edgecolor="none", zorder=1))
-        ax.text(x_r + 1.6, yc, "x  " + kills, fontsize=5.9, color="0.22", va="center",
+        ax.text(x_r + 1.6, yc, "x  " + kills, fontsize=FS(5.9), color="0.22", va="center",
                 linespacing=1.35)
         if k < n - 1:
             ax.add_patch(FancyArrowPatch((x_l + w_l / 2, y - 0.15),
                                          (x_l + w_l / 2, y - cell + bh + 0.15),
                                          arrowstyle="-|>", mutation_scale=7,
                                          color="0.5", lw=0.8, zorder=3))
-    ax.text(2.0, 99.0, "Observation-to-null evidence chain   (logic v%s, 2026-10-09)"
-            % LOGIC_VERSION, fontsize=8.2, fontweight="bold", color=C_INK, va="top")
-    ax.text(2.0, 1.0,
-            "Key invariant: step 2 shrinks only the denominator (5608->5014); step 3 keeps the candidate set "
-            "pairwise identical between v1.2 and v1.3 (30<->30), so the science is immune to adopting v1.3.",
-            fontsize=5.7, color="0.32", va="bottom")
+    fit(ax, 2.0, 99.0, "Observation-to-null evidence chain   (logic v%s, 2026-10-09)"
+        % LOGIC_VERSION, FS(8.2), max_w=0.96, fontweight="bold", color=C_INK, va="top")
+    fit(ax, 2.0, 1.0, "Key invariant: step 2 shrinks only the denominator (5608->5014); the criterion\n"
+        "set is frozen at 28 pairs, which is what every null below is measured against.",
+        FS(5.7), max_w=0.96, color="0.32", va="bottom")
     report_collisions(fig, 'fig1_evidence_chain')
     fig.savefig(FIGDIR / "fig1_evidence_chain.png")
     plt.close(fig)
@@ -250,12 +245,12 @@ def fig2():
                                         fc="#F2F6FA" if not last else "#E7F1E9",
                                         ec=C_BLUE if not last else C_GREEN, lw=0.9))
             bw = 0.98 * axw
-            fit(ax, 4, y - 4.0, lab, FS(6.6), max_w=0.62 * bw / axw, va="top",
+            fit(ax, 4, y - 4.0, lab, FS(6.6), max_w=0.74 * bw / axw, va="top",
                 color="0.12")
             fit(ax, 96, y - 4.0, f"{num:,}", FS(9.0), max_w=0.30 * bw / axw, ha="right",
                 va="top", fontweight="bold", color=C_BLUE if not last else C_GREEN)
             if note:
-                fit(ax, 4, y - 11.0, note, FS(5.9), max_w=0.90 * bw / axw, va="top",
+                fit(ax, 4, y - 11.0, note, FS(5.9), max_w=0.96 * bw / axw, va="top",
                     color="0.35", linespacing=1.35)
             if not last:
                 ax.add_patch(FancyArrowPatch((50, y - h + 0.6), (50, y - h - 2.4),
@@ -276,12 +271,12 @@ def fig2():
         ("catalogue rows concatenated", n_rows,
          f"{n_cat1} Cat1 + {n_cat2:,} localized Cat2 rows"),
         ("distinct events", n_all,
-         f"{n_dup} Cat1 rows re-meeting Cat2 dropped"),
+         f"{n_dup} Cat1 rows also in Cat2 dropped"),
         ("apparent one-off events", n_oo,
          f"{n_rep:,} repeater-linked set aside"),
         ("declared search domain", n_dom,
-         "finite dispersion measure and coordinates"),
-    ], "From catalogue rows to the search domain")
+         "finite dispersion measure, RA/Dec"),
+    ], "From rows to the search domain")
     panel_label(ax, "a", dx=-0.10)
 
     ax = fig.add_subplot(gs[0, 1])
@@ -316,7 +311,7 @@ def fig3():
     samples = np.array(iso["samples"]["min_theta05_arcsec"], float)
 
     fig = plt.figure(figsize=SZ(7.6, 3.2))
-    gs = fig.add_gridspec(1, 3, width_ratios=[1.35, 1.0, 0.9], wspace=0.42)
+    gs = fig.add_gridspec(1, 3, width_ratios=[1.35, 1.0, 0.9], wspace=0.32)
 
     ax = fig.add_subplot(gs[0, 0])
     ax.scatter(th[ok], np.maximum(ddm[ok], 8e-4), s=6, c=C_GREY, alpha=0.6,
@@ -333,10 +328,10 @@ def fig3():
     ax.axvline(600, color="0.4", lw=0.7, ls=":")
     px, py = 23.86, 0.1769
     ax.scatter(px, py, s=110, marker="*", c=C_RED, edgecolors="k", lw=0.4, zorder=6)
-    fit(ax, 0.97, 0.97,
-        "FRB20200511C x FRB20211128E\n23.9'', 0.18 (0.12$\\sigma$, calibrated floor)",
-        FS(5.8), max_w=0.66, xy=(px, py), textcoords=ax.transAxes,
-        color=C_RED, ha="right", va="top", linespacing=1.35,
+    fit(ax, 0.03, 0.26,
+        "FRB20200511C\nx FRB20211128E\n23.9'', 0.18 = 0.12$\\sigma$ (floor)",
+        FS(5.8), max_w=0.92, xy=(px, py), textcoords=ax.transAxes,
+        color=C_RED, ha="left", va="top", linespacing=1.35,
         arrowprops=dict(arrowstyle="-|>", color=C_RED, lw=0.7, shrinkA=0, shrinkB=3))
     ax.set_xscale("log"); ax.set_yscale("log")
     ax.set_xlim(8, 900); ax.set_ylim(5e-4, 3e3)
@@ -348,7 +343,7 @@ def fig3():
         Line2D([], [], ls="", marker="o", ms=4, mfc="none", mec=C_BLUE, mew=0.9, label="cross-day"),
         Line2D([], [], ls="", marker="s", ms=3.2, mfc="none", mec="#9AA7B4", mew=0.7, label="same-day"),
         Line2D([], [], ls="", marker="*", ms=7, mfc=C_RED, mec="k", mew=0.4, label="primary"),
-    ], loc="lower left", frameon=False, handletextpad=0.3, borderaxespad=0.2)
+    ], loc="upper left", frameon=False, handletextpad=0.3, borderaxespad=0.2)
     panel_label(ax, "a", dx=-0.16)
 
     ax = fig.add_subplot(gs[0, 1])
@@ -361,32 +356,34 @@ def fig3():
     ax.set_xlabel("min $\\theta$ (|$\\Delta$DM|<0.5), arcsec")
     ax.set_ylabel("MC realizations")
     ax.set_ylim(0, 240)
-    fit(ax, 0.03, 0.60, "obs 20.1''\n(113.7 d pair)", FS(5.8), max_w=0.40,
+    fit(ax, 0.03, 0.62, "obs 20.1''\n113.7 d pair", FS(5.8), max_w=0.62,
         xy=(20.1, 45), textcoords=ax.transAxes, color=C_RED, ha="left", va="center",
-        linespacing=1.35, arrowprops=dict(arrowstyle="-|>", color=C_RED, lw=0.7))
-    ax.text(0.97, 0.97, "error-convolved null\n1,000 draws\nmedian 1.2$\\times$10$^4$''\n"
-                        "0 reach the box",
-            transform=ax.transAxes, fontsize=FS(5.6), ha="right", va="top",
-            color="0.15", linespacing=1.4)
-    ax.tick_params(axis="y", labelsize=6.0)
+        linespacing=1.35, bbox=dict(boxstyle="round,pad=0.2", fc="white", ec="none", alpha=0.85),
+        arrowprops=dict(arrowstyle="-|>", color=C_RED, lw=0.7))
+    fit(ax, 0.97, 0.97, "error-convolved null\n1,000 draws\nmedian 1.2$\\times$10$^4$''\n"
+        "0 reach the box", FS(5.6), max_w=0.88, transform=ax.transAxes,
+        ha="right", va="top", color="0.15", linespacing=1.4)
+    ax.tick_params(axis="y", labelsize=FS(6.0))
     panel_label(ax, "b", dx=-0.22)
 
     ax = fig.add_subplot(gs[0, 2])
     ax.set_axis_off(); ax.set_xlim(0, 100); ax.set_ylim(0, 100)
-    ax.text(0, 99, "Error-propagation chain", fontsize=FS(7.0), fontweight="bold",
-            color=C_INK, va="top")
+    fit(ax, 0, 99, "Error chain", FS(7.0), max_w=0.94,
+        fontweight="bold", color=C_INK, va="top")
     items = [
-        ("per-burst localization", "$\\sigma$ ~ 705'' / 745''\n(ra / dec median)", C_GREY),
-        ("independent assumption", "$\\sigma_{comb}$ ~ 1189''\n-> 23.9'' looks trivial", C_GREY),
-        ("same beam for both bursts", "systematic errors are\nhighly correlated", C_GREEN),
-        ("effective precision", ">> better than $\\sigma_{comb}$\n-> MC is conservative", C_GREEN),
+        ("localization", "$\\sigma$ ~ 705''/745''\n(ra / dec median)", C_GREY),
+        ("independence", "$\\sigma_{comb}$ ~ 1189''\n-> 23.9'' trivial", C_GREY),
+        ("same beam", "systematic errors\nare correlated", C_GREEN),
+        ("precision", "beats 1189''\nMC conservative", C_GREEN),
     ]
     y = 94
     for k, (t, b, col) in enumerate(items):
         ax.add_patch(Rectangle((1, y - 21), 98, 20,
                                facecolor=col, alpha=0.10, edgecolor=col, lw=0.9))
-        ax.text(5, y - 2.5, t, fontsize=FS(5.9), fontweight="bold", color="0.15", va="top")
-        ax.text(5, y - 9.5, b, fontsize=FS(5.4), va="top", color="0.25", linespacing=1.4)
+        fit(ax, 5, y - 2.5, t, FS(5.9), max_w=0.94, fontweight="bold",
+            color="0.15", va="top")
+        fit(ax, 5, y - 9.5, b, FS(5.4), max_w=0.94, va="top", color="0.25",
+            linespacing=1.4)
         if k < 3:
             ax.add_patch(FancyArrowPatch((50, y - 21.4), (50, y - 23.6),
                                          arrowstyle="-|>", mutation_scale=6,
@@ -419,10 +416,11 @@ def fig4():
     ax.set_yticks([])
     ax.set_xlabel("$\\Delta t \\,/\\, T_{sid}$")
     ax.annotate("567.00191\n(164 s from integer)",
-                xy=(n_sid, 0.55), xytext=(565.05, 0.90), fontsize=5.8, color=C_RED,
+                xy=(n_sid, 0.55), xytext=(565.05, 0.90), fontsize=FS(5.8), color=C_RED,
                 arrowprops=dict(arrowstyle="-", color=C_RED, lw=0.7))
-    ax.text(0.97, 0.04, "P(<= 0.002 of an integer by chance) ~ 0.4%",
-            transform=ax.transAxes, fontsize=5.6, color="0.2", va="bottom", ha="right")
+    fit(ax, 0.97, 0.04, "P(chance within\n0.002 of an integer)\n~ 0.4%",
+        FS(5.6), max_w=0.92, transform=ax.transAxes, color="0.2", va="bottom",
+        ha="right")
     panel_label(ax, "a", dx=-0.20)
 
     ax = fig.add_subplot(gs[0, 1])
@@ -452,7 +450,7 @@ def fig4():
     ax.axvline(pf, color=C_RED, lw=1.2, zorder=6, label="this pair = 567.00 $T_{sid}$")
     ax.set_xlim(0, 0.09); ax.set_xlabel("fractional part of $\\Delta t/T_{sid}$ (folded)")
     ax.set_ylabel("probability density")
-    ax.legend(loc="upper left", frameon=False, handletextpad=0.3, fontsize=FS(5.8))
+    ax.legend(loc="upper right", frameon=False, handletextpad=0.3, fontsize=FS(5.8))
     panel_label(ax, "b", dx=-0.16)
 
     DRAO = EarthLocation.from_geodetic(lon=-119.6286 * u.deg, lat=49.3167 * u.deg,
@@ -468,7 +466,7 @@ def fig4():
     ax.axvline(np.median(ah), color="k", lw=0.8, ls="--")
     ax.set_xlabel("|hour angle| (h)"); ax.set_ylabel("Cat2 events")
     ax.text(0.97, 0.97, "median 0.049 h\n78.9% at |HA|<0.1 h\nCHIME transit window",
-            transform=ax.transAxes, fontsize=5.8, ha="right", va="top", color="0.15")
+            transform=ax.transAxes, fontsize=FS(5.8), ha="right", va="top", color="0.15")
     axi = ax.inset_axes([0.50, 0.38, 0.40, 0.42])
     theta = np.linspace(-1.2, 1.2, 100)
     axi.plot(theta, np.cos(theta * np.pi / 2.4), color=C_BLUE, lw=1.0)
@@ -476,8 +474,8 @@ def fig4():
     axi.set_xticks([]); axi.set_yticks([])
     for s in ("top", "right"):
         axi.spines[s].set_visible(False)
-    axi.set_xlabel("HA", fontsize=5.0, labelpad=0.5)
-    axi.set_title("transit", fontsize=5.0, pad=1)
+    axi.set_xlabel("HA", fontsize=FS(5.0), labelpad=0.5)
+    axi.set_title("transit", fontsize=FS(5.0), pad=1)
     panel_label(ax, "c", dx=-0.20)
     report_collisions(fig, 'fig4_sidereal_quantization')
     fig.savefig(FIGDIR / "fig4_sidereal_quantization.png")
@@ -534,7 +532,7 @@ def fig6():
             label="catalog scaling\nlog $\\tau$ = $-$3.55 + 0.59 log DM")
     ax.add_patch(Rectangle((1500, 0.015), 500, 3000, facecolor=C_ORANGE, alpha=0.13,
                            edgecolor="none", zorder=0))
-    ax.text(1750, 1.05e3, "matched cell\nSNR 8-15\nmedian 31 ms", fontsize=5.5,
+    ax.text(1750, 1.05e3, "matched cell\nSNR 8-15\nmedian 31 ms", fontsize=FS(5.5),
             ha="center", color="0.2", linespacing=1.35, va="top")
     for val, ls in ((cell["p25"], ":"), (cell["median"], "-"), (cell["p75"], ":")):
         ax.plot([1500, 2000], [val, val], color=C_ORANGE, lw=0.8, ls=ls, zorder=4)
@@ -544,7 +542,7 @@ def fig6():
     ax.scatter([1835], [cell["median"]], s=30, facecolors="none", edgecolors=C_RED,
                lw=0.9, zorder=6)
     ax.annotate("FRB20200511C x FRB20211128E\nno measurable $\\tau$ (<~5.2 ms)\nvs expected 24 ms / cell 31 ms",
-                xy=(1835, 4.6), xytext=(112, 3.0e-1), fontsize=5.4, color=C_RED,
+                xy=(1835, 4.6), xytext=(112, 3.0e-1), fontsize=FS(5.4), color=C_RED,
                 arrowprops=dict(arrowstyle="-", color=C_RED, lw=0.6), linespacing=1.45,
                 va="top")
     ax.set_xscale("log"); ax.set_yscale("log")
@@ -552,9 +550,9 @@ def fig6():
     ax.set_xlabel("DM (pc cm$^{-3}$)"); ax.set_ylabel("scattering time $\\tau$ (ms)")
     ax.grid(True, which="major", ls=":", lw=0.3, alpha=0.4)
     ax.legend(loc="lower left", frameon=False, handletextpad=0.4, borderaxespad=0.2,
-              fontsize=5.6)
+              fontsize=FS(5.6))
     ax.text(0.035, 0.97, ">~2 orders below both the trend\nand the matched control cell\n-> DM not from a turbulent screen\n-> independent H1/H2 discriminant",
-            transform=ax.transAxes, fontsize=5.4, ha="left", va="top", color="0.15",
+            transform=ax.transAxes, fontsize=FS(5.4), ha="left", va="top", color="0.15",
             linespacing=1.45)
     fig.tight_layout()
     report_collisions(fig, 'fig6_scattering_discriminant')
@@ -578,11 +576,14 @@ if __name__ == "__main__":
     ap.add_argument("--only", default="all",
                     help=f"all（={','.join(SUBMISSION)}）或逗号分隔，如 fig3,fig5；"
                          f"未入稿的 fig1 需显式点名")
-    ap.add_argument("--min-fs", type=float, default=7.0,
-                    help="字号地板 pt（默认 7.0）；0 表示保持原字号（旧行为）")
+    ap.add_argument("--min-fs", type=float, default=7.30,
+                    help="字号地板 pt（默认 7.3，145mm 版心下印 7.06）；0 表示保持旧行为")
     a = ap.parse_args()
 
     globals()["MIN_FS"] = a.min_fs
+    matplotlib.rcParams.update({"font.size": FS(7.0), "axes.labelsize": FS(7.5),
+                                "axes.titlesize": FS(7.5), "xtick.labelsize": FS(6.5),
+                                "ytick.labelsize": FS(6.5), "legend.fontsize": FS(6.0)})
     globals()["FIGDIR"] = Path(a.outdir)
     matplotlib.rcParams["figure.dpi"] = a.dpi
     matplotlib.rcParams["savefig.dpi"] = a.dpi
@@ -595,5 +596,6 @@ if __name__ == "__main__":
         raise SystemExit(f"未知图名 {unknown}；默认清单 {SUBMISSION}，可显式点名的全部 {list(ALL)}")
     for w in want:
         ALL[w]()
+        report_fit(w)
         fname = next(k for k, v in NAMES.items() if v == w)
         print(f"{w} ok  ->  {FIGDIR / fname}  dpi={a.dpi:g}  min-fs={a.min_fs:g}")
