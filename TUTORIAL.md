@@ -447,6 +447,11 @@ python scripts/make_layout_figs2.py                                    # scatter
   Measured: `raa.cls` sets textwidth to 145mm for the final layout and 200mm under [referee];
   generators design at 15.00 cm. The audit's former 16.2 cm matched neither and is now 14.5 cm.
   Vector glyph sizes are read from the PDF text operators, so they are unaffected by that constant.
+- **字号地板（矢量）**：`make_layout_figs*.py` 的 `put_fit` 不再把文字缩到地板以下；放不下时打印
+  `'...' 可用 X 需要 Y` 清单，由人决定缩短文字还是放宽框。测量口径是 PDF 每行最大 run，
+  `audit_figure_specs.py` 会直接给出结论；当前 5 张矢量图硬违规 0 / 软提醒 0。
+  Floor enforcement: `put_fit` refuses to go below 7.30 pt and reports what does not fit, so fitting
+  is a design decision rather than a silent downgrade of printed legibility.
 - 字体只用 matplotlib 自带 DejaVu Sans，**不需要系统字体** ⇒ Linux 上也能出同样的图。
   Bundled DejaVu only, so this works on Linux.
 - 唯一需要 Windows 字体（`msyh.ttc` / `times.ttf`）的是 `build_retext.py` + `retext_figures.py`
@@ -535,9 +540,13 @@ Their outputs ship as archives, so reproducing the text needs no network.
    ⇒ 目录赤经是按 `mjd_400`(UTC) 反推的，故 UTC 下 |HA|≈0 属构造结果，不是独立证据。
 4. **排名只主张第一名。** 换地板口径后第 2 名可跌到第 6；第 4–7 名随局部门窗互换。
 5. **DM–z 关系在低红移处系统性偏高 32–45%**（见步骤 17），所以 z 只作下沿；正文已把这层写进去。
-6. **字号地板**：实测 5 张**矢量**版式图的嵌入字形为 **4.3–4.9 pt**（直接读 PDF 的 Tf 算子，非缩放假象），低于 7 pt 内部软线（RAA 位图分档
-   **硬违规 0**）；位图字号无法从像素反读，故不在该项内。属稿件侧待办，不影响数字复现。
-7. **期刊要件仍需作者提供**：仓库链接、AI 工具使用声明与日期、机构邮编、关键词体式。
+6. **字号地板**：5 张矢量版式图原先被 `put_fit` 逐级缩到 3.95–4.65 pt，现已设**硬地板 7.30 pt 名义**
+   （145 mm 版心下印 7.06 pt），塞不下即**报告而不是偷缩**；`audit_figure_specs.py` 的矢量分支改为按
+   **每行最大 run** 读 PDF 真实字形（刻度数字与数学下标豁免），现**硬违规 0 / 软提醒 0**。
+   **仍存的一处偏差（有意不重绘）**：6 张位图的 `make_figs.py` 地板默认是 7.0 名义（印 6.77 pt），
+   且自动适配留有 `MIN_FS*0.85` 的逃逸口（可到 5.95 名义 / 5.75 印刷）。抬到 7.3 需重出 6 张 900 dpi
+   面板并使现有逐像素一致性验证作废，故与 R7 合并到修回轮一次做完。RAA 无字号条款，此为自定线。
+7. **仍待作者提供的**：论文 DOI/arXiv 回填、Zenodo 导入该 Release 取 DOI（需其 GitHub 账号）。仓库链接、AI 工具名与日期、邮编 310030、关键词取表均已完成。
 8. **图与表的可复现性只到"重出与 PDF 逐像素相同"这一层**；期刊系统的色彩/分档要求由
    `audit_figure_specs.py` 判，它需要 `docs/figures` 目录在位。
 
