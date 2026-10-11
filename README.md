@@ -17,6 +17,7 @@ reproduces every published number from public data, with no private inputs and n
 | [TUTORIAL.md § 11](TUTORIAL.md#11) | what this release does *not* establish |
 | [scripts/_tier.txt](scripts/_tier.txt) | which scripts are on the reproduction path and which are archived one-off probes |
 | [INPUTS.sha256](INPUTS.sha256) | hashes of every shipped input file |
+| [LICENSE](LICENSE) · [CITATION.cff](CITATION.cff) | licence, and the scope note for third-party data · software citation metadata |
 | [data/raw/chime/SOURCES.json](data/raw/chime/SOURCES.json) | download URL, size, hash and retrieval date of each public catalogue file |
 | [reproduction/](reproduction/) | derived tables and JSON artefacts cited by the study, with `MANIFEST.csv` |
 
@@ -72,8 +73,13 @@ pixel-identical to those in the compiled paper, and `scripts/audit_manuscript_nu
 confirms 67 of 67 published quantities against the recomputed artefacts. Details in
 [RUNBOOK.md](RUNBOOK.md#verification) and [TUTORIAL.md § 12](TUTORIAL.md#12).
 
-## Status
+## Licence and citation
 
-Branch `main` carries the verified reproduction release. No licence file has been added to this
-repository yet, so all rights are reserved by the authors until one is chosen; a tagged release
-with a deposit DOI is pending.
+The code, tests and documentation are released under the [BSD 3-Clause licence](LICENSE), the same
+licence used by the surrounding scientific Python stack; the third-party catalogue files under
+`data/raw/` are not relicensed by it and remain subject to their own terms of use, as recorded in
+[LICENSE](LICENSE) and in [data/raw/chime/SOURCES.json](data/raw/chime/SOURCES.json).
+
+Software citation metadata is in [CITATION.cff](CITATION.cff); the release is tagged
+[`v1.0.0`](https://github.com/AcerisCentreforScience/frbpp_clean/releases/tag/v1.0.0). The
+companion paper reference is added here when it appears.

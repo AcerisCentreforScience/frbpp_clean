@@ -1,0 +1,21 @@
+cff-version: 1.2.0
+title: "frbpp: reproduction package for an isolated candidate same-source FRB pair in CHIME/FRB Catalogue 2"
+message: "Cite the software release for the analysis; the companion paper reference is added on publication."
+type: software
+authors:
+  - name: "AC4S (AcerisCentreforScience)"
+repository-code: "https://github.com/AcerisCentreforScience/frbpp_clean"
+license: BSD-3-Clause
+version: "1.0.0"
+date-released: "2026-10-11"
+abstract: >-
+  Point-process statistics engine and reproduction package. Contains the analysis library, one
+  script per calculation step, the unit tests, the public catalogue inputs used, and the derived
+  tables cited by the companion paper. A single command reproduces the published numbers from
+  public data without network access.
+keywords:
+  - fast radio bursts
+  - reproducibility
+  - point process
+  - dispersion measure
+  - CHIME

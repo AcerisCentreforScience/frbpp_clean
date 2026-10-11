@@ -602,7 +602,7 @@ with the hashes of its inputs, and must exclude anything a build produces:
 **Self-check before publishing / 对外发布前自查**
 
 ```bash
-git ls-files | wc -l                       # 期望 141
+git ls-files | wc -l                       # 期望 157
 git ls-files | grep -E "local[.]json$|__pycache__|^OUT/|interim/"   # 期望只有 data/interim/.gitkeep
 git ls-files | grep -c "tns_search_"               # 期望 3：两个随包归档件 + 产生它们的脚本
 grep -rn "G:/FRB" --include="*.py" --include="*.sh" . ; echo rc=$?  # 期望 rc=1（无残留绝对路径）
