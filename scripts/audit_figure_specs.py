@@ -128,29 +128,30 @@ def retext_min_px(key: str) -> int:
 
 
 def vector_min_label_pt(pdf_path: Path) -> float | None:
-    """Smallest font size among label-like spans of a vector figure, read from the PDF.
+    """Smallest line-level font size of a vector figure, read from the PDF.
 
-    Tick numerals, single characters and exponent-only strings are skipped: a log-axis caption of
-    the form 10^-3 renders its script at 0.7x the label size, which is normal typography and not a
-    legibility failure.
+    Each text line contributes its largest run: a mathtext subscript or a log-axis exponent is drawn
+    at 0.7x its base size by design and shares the body font family, so a per-span minimum would
+    flag correct typography. Lines made only of numerals or signs are tick labels and are skipped.
     """
     try:
         import pymupdf
     except Exception:
         return None
     sizes = []
+    numerals = set("0123456789.−-+eEx")
     with pymupdf.open(str(pdf_path)) as doc:
         for page in doc:
             for blk in page.get_text("dict")["blocks"]:
                 for line in blk.get("lines", []):
-                    for span in line.get("spans", []):
-                        txt = span["text"].strip()
-                        if len(txt) < 2 or all(c in "0123456789.\u2212-+eE x" for c in txt):
-                            continue
-                        sizes.append(float(span["size"]))
+                    spans = [(s["text"].strip(), float(s["size"])) for s in line.get("spans", [])]
+                    spans = [(t, z) for t, z in spans if t]
+                    if not spans:
+                        continue
+                    if all(all(c in numerals for c in t) for t, _ in spans):
+                        continue
+                    sizes.append(max(z for _, z in spans))
     return min(sizes) if sizes else None
-
-
 def main() -> int:
     specs = design_specs()
     hard, soft = [], []
