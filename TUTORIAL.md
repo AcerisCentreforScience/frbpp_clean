@@ -58,7 +58,7 @@ virtual environment; the rebuilt `reproduction/` matches the shipped one byte-fo
 `built_at` fields; the six raster figures regenerate pixel-identical to the compiled PDF (maxdiff 0);
 `audit_manuscript_numbers.py` reports **67/67** agreeing quantities.
 在换盘 + 全新虚拟环境下 18/18 步 exit 0；重建的 `reproduction/` 与随包件**只差 4 个 `built_at`**；
-6 张位图重出后与投稿 PDF 内嵌图逐像素相同；`audit_manuscript_numbers.py` **67/67 一致**。
+6 张位图重出后与论文 PDF 内嵌图逐像素相同；`audit_manuscript_numbers.py` **67/67 一致**。
 
 ---
 
@@ -432,7 +432,7 @@ python scripts/make_layout_figs2.py                                    # scatter
 - 唯一需要 Windows 字体（`msyh.ttc` / `times.ttf`）的是 `build_retext.py` + `retext_figures.py`
   的换字支线，**不在正文复现路径上**。
   Only the retext branch needs Windows fonts, and it is off the reproduction path.
-- 实测：在"换盘 + 全新环境"下重出的 6 张位图与投稿 PDF 内嵌图**逐像素 maxdiff = 0**；
+- 实测：在"换盘 + 全新环境"下重出的 6 张位图与论文 PDF 内嵌图**逐像素 maxdiff = 0**；
   5 张矢量图所画文字与磁盘版本零差异。
   Measured: 6 rasters pixel-identical to the PDF's (maxdiff 0), 5 vectors text-identical.
 
@@ -448,7 +448,7 @@ This repository ships code and derived data, not the manuscript, so point these 
 ```bash
 python scripts/check_tex.py   docs/submission/raa_manuscript_revised.tex   # 结构一致性 / structure
 python scripts/audit_refs.py  docs/submission/raa_manuscript_revised.tex   # 文献↔引用双向、字母序
-python scripts/audit_submission.py raa_manuscript_revised                  # 九项投稿合规
+python scripts/audit_submission.py raa_manuscript_revised                  # 九项期刊合规
 python scripts/audit_manuscript_numbers.py --tex ...                       # 数字↔产物（§6）
 ```
 `audit_submission.py` 需要 `docs/submission/<stem>.tex` 与 `docs/submission/_build/<stem>.pdf`，
@@ -458,7 +458,7 @@ It needs a compiled PDF; use XeLaTeX (pdflatex fails on fontspec):
 PATH="/path/to/MiKTeX/miktex/bin/x64:$PATH"
 xelatex -interaction=nonstopmode -output-directory=_build raa_manuscript_revised.tex   # ×3
 ```
-当前状态 / current: 37 页、三遍 0 错误、`check_tex` ALL CHECKS PASSED、投稿审计**硬违规 0**、
+当前状态 / current: 37 页、三遍 0 错误、`check_tex` ALL CHECKS PASSED、期刊合规审计**硬违规 0**、
 `audit_refs` 33 条 ↔ 33 键无悬空无未引、字母序正确、`audit_manuscript_numbers` **67/67**。
 
 ---
@@ -518,7 +518,7 @@ Their outputs ship as archives, so reproducing the text needs no network.
 6. **字号地板**：实测 5 张**矢量**版式图最小字号 **4.3–4.9 pt**，低于 7 pt 内部软线（RAA 位图分档
    **硬违规 0**）；位图字号无法从像素反读，故不在该项内。属稿件侧待办，不影响数字复现。
 7. **期刊要件仍需作者提供**：仓库链接、AI 工具使用声明与日期、机构邮编、关键词体式。
-8. **图与表的可复现性只到"重出与 PDF 逐像素相同"这一层**；投稿系统的色彩/分档要求由
+8. **图与表的可复现性只到"重出与 PDF 逐像素相同"这一层**；期刊系统的色彩/分档要求由
    `audit_figure_specs.py` 判，它需要 `docs/figures` 目录在位。
 
 ---
@@ -562,12 +562,17 @@ for f in sorted((new / "json").glob("*.json")):           # leaf values / 叶子
 PY
 ```
 本机 2026-10-11 实测 / observed here: `pytest` 50 passed / 1 skipped / 0 failed；18 步单趟 `CHAIN_RC=0`；
-三张表与两份 TNS 台账逐字节相同；794 个 JSON 叶子中只有 4 个 `built_at` 不同；6 张位图重出后与投稿 PDF
+三张表与两份 TNS 台账逐字节相同；794 个 JSON 叶子中只有 4 个 `built_at` 不同；6 张位图重出后与论文 PDF
 内嵌图 maxdiff = 0；`audit_manuscript_numbers.py` 67/67。
 
 **别拿新清单自比 / do not self-validate.** `repro_package.py` 会重写 `reproduction/MANIFEST.csv`，所以用
 新生成的 MANIFEST 校验新文件必然全绿——那种"绿"没有信息量。比对基准必须是**随包那一份** `reproduction/`；
 又因 `built_at` 每次运行都变，JSON 的正确判据是"差异叶子只能是 `built_at`"，而非"逐字节相同"。
+
+还有一层平台差异要知道：`MANIFEST.csv` 里的 sha256 是在**产生它的那台机器**上按写出的字节算的，而
+CSV/JSON 的行尾随平台而变（Windows 写 CRLF、Linux 写 LF）。所以逐字节校验只在同平台成立；跨平台的正确
+判据是**值级比较**（上面的脚本按叶子值比对，并把 `built_at` 单列）。`.gitattributes` 因此对 `reproduction/**`
+与 `data/raw/**` 关闭文本转换，保证克隆下来的输入与随包产物跟清单逐字节一致。
 
 ---
 

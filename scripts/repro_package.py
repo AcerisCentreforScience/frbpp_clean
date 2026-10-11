@@ -271,7 +271,7 @@ def main() -> int:
     rows = []
     for p in sorted(OUT.rglob("*")):
         if p.is_file() and p.name != "MANIFEST.csv":
-            rows.append({"path": str(p.relative_to(OUT)), "bytes": p.stat().st_size,
+            rows.append({"path": p.relative_to(OUT).as_posix(), "bytes": p.stat().st_size,
                          "sha256": hashlib.sha256(p.read_bytes()).hexdigest()})
     pd.DataFrame(rows).to_csv(OUT / "MANIFEST.csv", index=False)
     print(f"复现包 {len(rows)} 个文件 -> {OUT.relative_to(ROOT)}")

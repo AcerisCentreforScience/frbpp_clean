@@ -18,3 +18,7 @@
 *.jsonl -text
 *.tsv  -text
 *.parquet -text
+
+# The shipped package and its manifest are integrity data: store them exactly as written.
+reproduction/** -text
+data/raw/** -text
