@@ -82,5 +82,5 @@ licence used by the surrounding scientific Python stack; the third-party catalog
 [LICENSE](LICENSE) and in [data/raw/chime/SOURCES.json](data/raw/chime/SOURCES.json).
 
 Software citation metadata is in [CITATION.cff](CITATION.cff); the release is tagged
-[`v1.1.0`](https://github.com/AcerisCentreforScience/frbpp_clean/releases/tag/v1.1.0). The
+[`v1.1.1`](https://github.com/AcerisCentreforScience/frbpp_clean/releases/tag/v1.1.1). The
 companion paper reference is added here when it appears.

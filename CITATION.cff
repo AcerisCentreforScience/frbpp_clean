@@ -6,8 +6,8 @@ authors:
   - name: "AC4S (AcerisCentreforScience)"
 repository-code: "https://github.com/AcerisCentreforScience/frbpp_clean"
 license: BSD-3-Clause
-version: "1.1.0"
-date-released: "2026-10-11"
+version: "1.1.1"
+date-released: "2026-10-12"
 abstract: >-
   Point-process statistics engine and reproduction package. Contains the analysis library, one
   script per calculation step, the unit tests, the public catalogue inputs used, and the derived
